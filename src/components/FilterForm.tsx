@@ -1,27 +1,27 @@
-import { Formik } from 'formik'
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import React, { memo } from 'react'
-import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import { updateContactsFilterActionCreator } from 'src/store/actions'
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
+import { Formik } from 'formik'
+
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+
+import { selector as contactsFilterSelectors, action as contactsFilterActions } from 'src/store/contactsFilter'
+import { selector as groupContactsSelectors } from 'src/store/groupContacts'
 
 export interface FilterFormValues {
     name: string,
     groupId: string
 }
 
-// interface FilterFormProps extends FormikConfig<Partial<FilterFormValues>> {
-//   groupContactsList: GroupContactsDto[]
-// }
-
 export const FilterForm = memo(() => {
 
     const dispatch = useAppDispatch()
-    const groupContactsList: GroupContactsDto[] = useAppSelector((state) => state.groupContacts)
-    const contactsFilter: Partial<FilterFormValues> = useAppSelector((state) => state.contactsFilter)
+
+    const groupContactsList = useSelector(groupContactsSelectors.get())
+    const contactsFilter = useSelector(contactsFilterSelectors.get())
 
     function onSubmit(fv: Partial<FilterFormValues>) {
-        dispatch(updateContactsFilterActionCreator(fv))
+        dispatch(contactsFilterActions.update(fv))
     }
 
     return (

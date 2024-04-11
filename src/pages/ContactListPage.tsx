@@ -1,10 +1,15 @@
 import React, { memo } from 'react'
+import { useSelector } from 'react-redux'
 import { Col, Row } from 'react-bootstrap'
+
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import { useAppSelector } from 'src/store/hooks'
+
+import { selector as contactsSelectors } from 'src/store/contacts'
+import { selector as groupContactsSelectors } from 'src/store/groupContacts'
+import { selector as contactsFilterSelectors } from 'src/store/contactsFilter'
 
 function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filterValue: Partial<FilterFormValues>) {
 
@@ -36,16 +41,16 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 
 export const ContactListPage = memo(() => {
 
-    const contacts = useAppSelector((state) => state.contacts)
-    const groupContacts = useAppSelector((state) => state.groupContacts)
-    const contactsFilter = useAppSelector((state) => state.contactsFilter)
+    const contacts = useSelector(contactsSelectors.get())
+    const groupContacts = useSelector(groupContactsSelectors.get())
+    const contactsFilter = useSelector(contactsFilterSelectors.get())
 
     const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
 
     return (
         <Row xxl={1}>
             <Col className="mb-3">
-                <FilterForm />
+                <FilterForm/>
             </Col>
             <Col>
                 <Row xxl={4} className="g-4">

@@ -1,38 +1,48 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { contactsReducer } from 'src/store/contactsReducer'
-import { groupContactsReducer } from 'src/store/groupContactsReducer'
-import { contactsFilterReducer } from 'src/store/contactsFilterReducer'
-import { favouriteContactsReducer } from 'src/store/favouriteContactsReducer'
-import { logActionMiddleware } from 'src/store/logActionMiddleware'
-import { persistStore, persistReducer } from 'redux-persist'
-import { composeWithDevTools } from '@redux-devtools/extension'
+import { combineReducers, Reducer } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import localStorage from 'redux-persist/lib/storage'
 import thunkMiddleware from 'redux-thunk'
+import { persistStore, persistReducer } from 'redux-persist'
 
-// const reducers = combineReducers({
-//     contacts: contactsReducer,
-//     groupContacts: groupContactsReducer,
-//     contactsFilter: contactsFilterReducer,
-//     favouriteContacts: favouriteContactsReducer,
-// })
+import { logActionMiddleware } from 'src/store/logActionMiddleware'
 
-const reducers = persistReducer(
+import { reducer as contactsReducer } from './contacts'
+import { reducer as groupContactsReducer } from './groupContacts'
+import { reducer as contactsFilterReducer } from './contactsFilter'
+import { reducer as favouriteContactsReducer } from './favouriteContacts'
+
+export enum ReducersList {
+    contacts = 'contacts',
+    groupContacts = 'groupContacts',
+    contactsFilter = 'contactsFilter',
+    favouriteContacts = 'favouriteContacts',
+}
+
+const reducers = {
+    [ReducersList.contacts] : contactsReducer,
+    [ReducersList.groupContacts]: groupContactsReducer,
+    [ReducersList.contactsFilter]: contactsFilterReducer,
+    [ReducersList.favouriteContacts]: favouriteContactsReducer,
+}
+
+const reducer = persistReducer(
     {
         key: 'redux',
         storage: localStorage,
         // throttle: 100000,
     },
-    combineReducers({
-        contacts: contactsReducer,
-        groupContacts: groupContactsReducer,
-        contactsFilter: contactsFilterReducer,
-        favouriteContacts: favouriteContactsReducer,
-    })
+    combineReducers(reducers)
 )
 
-export const store = createStore(
-    reducers,
-    composeWithDevTools(applyMiddleware(thunkMiddleware, logActionMiddleware))
+export const store = configureStore(
+    {
+        reducer,
+        devTools: true,
+        middleware: [
+            thunkMiddleware,
+            logActionMiddleware,
+        ]
+    },
 )
 
 export const persistor = persistStore(store)
@@ -40,4 +50,4 @@ export const persistor = persistStore(store)
 // @ts-ignore
 window.persistor = persistor
 
-export type AppState = ReturnType<typeof reducers>
+export type AppState = ReturnType<typeof reducer>
