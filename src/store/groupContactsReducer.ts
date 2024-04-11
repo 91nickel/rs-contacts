@@ -1,5 +1,5 @@
-import initialGroupContacts from 'src/__data__/group-contacts.json'
+import initialState from 'src/__data__/group-contacts.json'
 
-export function groupContactsReducer (state = initialGroupContacts) {
+export function groupContactsReducer (state = initialState) {
     return state
 }
