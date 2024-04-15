@@ -3,7 +3,7 @@ import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { Formik } from 'formik'
 
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { useAppDispatch } from 'src/store/hooks'
 
 import { selector as contactsFilterSelectors, action as contactsFilterActions } from 'src/store/contactsFilter'
 import { selector as groupContactsSelectors } from 'src/store/groupContacts'

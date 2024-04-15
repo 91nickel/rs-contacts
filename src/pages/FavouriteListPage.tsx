@@ -1,12 +1,15 @@
 import React, { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/store/hooks'
+
+import { selector as contactsSelectors } from 'src/store/contacts'
+import { selector as favouriteContactsSelectors } from 'src/store/favouriteContacts'
 
 export const FavouriteListPage = memo(() => {
 
-    const contactsList = useAppSelector((state) => state.contacts)
-    const favouriteContactsList = useAppSelector((state) => state.favouriteContacts)
+    const contactsList = useSelector(contactsSelectors.get())
+    const favouriteContactsList = useSelector(favouriteContactsSelectors.get())
     const contacts = contactsList.filter(({id}) => favouriteContactsList.includes(id))
 
     return (

@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { DATA_CONTACT } from 'src/__data__'
-import { AppState, ReducersList } from 'src/store/index'
+import { AppState } from 'src/store/index'
 import { ContactDto } from 'src/types/dto/ContactDto'
+import { ReducersList } from "src/store/reducers.list"
+import { GroupContactsDto } from "src/types/dto/GroupContactsDto"
 
 const SLICE_NAME = ReducersList.contacts
 const initialState: ContactDto[] = DATA_CONTACT
@@ -18,9 +20,8 @@ export const reducer = slice.reducer
 
 export const action = {}
 
-type CurrentState = AppState[typeof SLICE_NAME]
-
 export const selector = {
-    get: () => (state: CurrentState) => state,
-    byId: (id: ContactDto['id']) => (state: CurrentState) => state.find(c => c.id === id),
+    get: () => ({[SLICE_NAME]: state}: AppState) => state,
+    byId: (id: ContactDto['id']) => ({[SLICE_NAME]: state}: AppState) => state.find(c => c.id === id),
+    byGroup: (ids: GroupContactsDto['contactIds']) => ({[SLICE_NAME]: state}: AppState) => state.filter(c => ids.includes(c.id)),
 }

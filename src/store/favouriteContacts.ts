@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DATA_CONTACT } from 'src/__data__'
-import { AppState, ReducersList } from 'src/store/index'
+import { AppState } from 'src/store/index'
 import { Dispatch } from 'redux'
 import { ContactDto } from 'src/types/dto/ContactDto'
+import { ReducersList } from "src/store/reducers.list"
 
 const SLICE_NAME =  ReducersList.favouriteContacts
 const initialState: Array<ContactDto['id']> = DATA_CONTACT.slice(0, 4).map(c => c.id)
@@ -39,8 +40,6 @@ export const action = {
     },
 }
 
-type CurrentState = AppState[typeof SLICE_NAME]
-
 export const selector = {
-    get: () => (state: CurrentState) => state,
+    get: () => ({[SLICE_NAME]: state}: AppState) => state,
 }

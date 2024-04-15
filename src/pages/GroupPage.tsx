@@ -1,16 +1,22 @@
 import React, { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
+import { useSelector } from "react-redux"
+
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/store/hooks'
+
+import { selector as contactsSelectors } from 'src/store/contacts'
+import { selector as groupContactsSelectors } from 'src/store/groupContacts'
+
+import { GroupContactsDto } from "src/types/dto/GroupContactsDto"
 
 export const GroupPage = memo(() => {
     const {groupId} = useParams<{ groupId: string }>()
 
-    const groupContacts = useAppSelector(state => state.groupContacts.find(({id}) => id === groupId))!
-    const contacts = useAppSelector(state => state.contacts.filter(c => groupContacts.contactIds.includes(c.id)))
+    const groupContacts = useSelector(groupContactsSelectors.byId(groupId as GroupContactsDto['id']))!
+    const contacts = useSelector(contactsSelectors.byGroup(groupContacts['contactIds']))
 
     return (
         <Row className="g-4">

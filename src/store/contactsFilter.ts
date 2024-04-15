@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { FilterFormValues } from 'src/components/FilterForm'
 import { Dispatch } from 'redux'
-import { AppState, ReducersList } from 'src/store/index'
+import { AppState } from 'src/store/index'
+import { FilterFormValues } from 'src/components/FilterForm'
+import { ReducersList } from "src/store/reducers.list"
 
 const SLICE_NAME = ReducersList.contactsFilter
 const initialState: Partial<FilterFormValues> = {}
@@ -32,8 +33,6 @@ export const action = {
     },
 }
 
-type CurrentState = AppState[typeof SLICE_NAME]
-
 export const selector = {
-    get: () => (state: CurrentState) => state,
+    get: () => ({[SLICE_NAME]: state}: AppState) => state,
 }

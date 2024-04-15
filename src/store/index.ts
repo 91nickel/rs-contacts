@@ -6,17 +6,11 @@ import { persistStore, persistReducer } from 'redux-persist'
 
 import { logActionMiddleware } from 'src/store/logActionMiddleware'
 
+import { reducer as contactsFilterReducer } from './contactsFilter'
 import { reducer as contactsReducer } from './contacts'
 import { reducer as groupContactsReducer } from './groupContacts'
-import { reducer as contactsFilterReducer } from './contactsFilter'
 import { reducer as favouriteContactsReducer } from './favouriteContacts'
-
-export enum ReducersList {
-    contacts = 'contacts',
-    groupContacts = 'groupContacts',
-    contactsFilter = 'contactsFilter',
-    favouriteContacts = 'favouriteContacts',
-}
+import { ReducersList } from "src/store/reducers.list"
 
 const reducers = {
     [ReducersList.contacts] : contactsReducer,

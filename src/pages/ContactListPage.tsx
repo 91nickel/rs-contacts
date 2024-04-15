@@ -45,8 +45,12 @@ export const ContactListPage = memo(() => {
     const groupContacts = useSelector(groupContactsSelectors.get())
     const contactsFilter = useSelector(contactsFilterSelectors.get())
 
-    const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
+    console.log(contacts)
+    console.log(groupContacts)
+    console.log(contactsFilter)
 
+    const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
+    console.log(contactsFiltered)
     return (
         <Row xxl={1}>
             <Col className="mb-3">
