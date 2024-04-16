@@ -7,7 +7,7 @@ import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
 
-import { Selector, ReducersList } from 'src/store'
+import { ReducersList, Selector } from 'src/store'
 import { useGetContactQuery } from 'src/store/contact'
 import { useGetGroupContactsQuery } from 'src/store/group'
 
@@ -41,6 +41,7 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 export const ContactListPage = memo(() => {
 
     // const contacts = useSelector(Selector[ReducersList.contacts].get())
+
     const {data: contacts} = useGetContactQuery()
     const {data: groupContacts} = useGetGroupContactsQuery()
 
