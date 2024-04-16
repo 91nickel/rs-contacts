@@ -52,6 +52,12 @@ export const ContactListPage = memo(() => {
 
     const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
 
+    const cards = contactsFiltered.map((contact: ContactDto) => (
+        <Col key={contact.id}>
+            <ContactCard contact={contact} withLink/>
+        </Col>
+    ))
+
     return (
         <Row xxl={1}>
             <Col className="mb-3">
@@ -59,11 +65,7 @@ export const ContactListPage = memo(() => {
             </Col>
             <Col>
                 <Row xxl={4} className="g-4">
-                    {contactsFiltered.map((contact: ContactDto) => (
-                        <Col key={contact.id}>
-                            <ContactCard contact={contact} withLink/>
-                        </Col>
-                    ))}
+                    {cards}
                 </Row>
             </Col>
         </Row>
