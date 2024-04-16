@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
-import './MainApp.scss'
-import { ThemeProvider } from 'react-bootstrap'
+import React  from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Layout } from 'src/components/Layout'
-import { ContactListPage, GroupPage, ContactPage, FavouriteListPage, GroupListPage } from 'src/pages'
+import { ThemeProvider } from 'react-bootstrap'
 import { Provider as StoreProvider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { ToastContainer } from 'react-toastify'
 
 import { store, persistor } from 'src/store'
-import { PersistGate } from 'redux-persist/integration/react'
+
+import { Layout } from 'src/components/Layout'
+import { ContactListPage, GroupPage, ContactPage, FavouriteListPage, GroupListPage } from 'src/pages'
+
+import './MainApp.scss'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const MainApp = () => {
     return (
@@ -47,6 +51,7 @@ export const MainApp = () => {
                     </BrowserRouter>
                 </ThemeProvider>
             </PersistGate>
+            <ToastContainer/>
         </StoreProvider>
     )
 }

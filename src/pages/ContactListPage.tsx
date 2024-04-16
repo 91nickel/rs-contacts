@@ -7,9 +7,9 @@ import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
 
-import { selector as contactsSelectors } from 'src/store/contacts'
-import { selector as groupContactsSelectors } from 'src/store/groupContacts'
-import { selector as contactsFilterSelectors } from 'src/store/contactsFilter'
+import { Selector, ReducersList } from 'src/store'
+import { useGetContactQuery } from 'src/store/contact'
+import { useGetGroupContactsQuery } from 'src/store/group'
 
 function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filterValue: Partial<FilterFormValues>) {
 
@@ -28,7 +28,6 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 
     if (filterValue.groupId) {
         const findGroupContacts = groupContacts.find(({id}) => id === filterValue.groupId)
-
         if (findGroupContacts) {
             findContacts = findContacts.filter(({id}) => (
                 findGroupContacts.contactIds.includes(id)
@@ -41,16 +40,18 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 
 export const ContactListPage = memo(() => {
 
-    const contacts = useSelector(contactsSelectors.get())
-    const groupContacts = useSelector(groupContactsSelectors.get())
-    const contactsFilter = useSelector(contactsFilterSelectors.get())
+    // const contacts = useSelector(Selector[ReducersList.contacts].get())
+    const {data: contacts} = useGetContactQuery()
+    const {data: groupContacts} = useGetGroupContactsQuery()
 
-    console.log(contacts)
-    console.log(groupContacts)
-    console.log(contactsFilter)
+    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+
+    if (!contacts || !groupContacts) {
+        return <h2>Loading...</h2>
+    }
 
     const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
-    console.log(contactsFiltered)
+
     return (
         <Row xxl={1}>
             <Col className="mb-3">

@@ -1,11 +1,15 @@
 import React, { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
-import { selector as groupContactsSelectors } from 'src/store/groupContacts'
+import { useGetGroupContactsQuery } from 'src/store/group'
 
 export const GroupListPage = memo(() => {
-    const groupContacts = useSelector(groupContactsSelectors.get())
+    // const groupContacts = useSelector(Selector[ReducersList.groupContacts].get())
+    const {data: groupContacts} = useGetGroupContactsQuery()
+    if (!groupContacts) {
+        return <h2>Loading...</h2>
+    }
+
     return (
         <Row xxl={4}>
             {groupContacts.map(gc => (

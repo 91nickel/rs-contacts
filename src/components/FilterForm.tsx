@@ -5,8 +5,8 @@ import { Formik } from 'formik'
 
 import { useAppDispatch } from 'src/store/hooks'
 
-import { selector as contactsFilterSelectors, action as contactsFilterActions } from 'src/store/contactsFilter'
-import { selector as groupContactsSelectors } from 'src/store/groupContacts'
+import { Action, Selector, ReducersList } from 'src/store'
+import { useGetGroupContactsQuery } from 'src/store/group'
 
 export interface FilterFormValues {
     name: string,
@@ -17,11 +17,16 @@ export const FilterForm = memo(() => {
 
     const dispatch = useAppDispatch()
 
-    const groupContactsList = useSelector(groupContactsSelectors.get())
-    const contactsFilter = useSelector(contactsFilterSelectors.get())
+    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
 
-    function onSubmit(fv: Partial<FilterFormValues>) {
-        dispatch(contactsFilterActions.update(fv))
+    // const groupContactsList = useSelector(Selector[ReducersList.groupContacts].get())
+    const {data: groupContactsList} = useGetGroupContactsQuery()
+    if (!groupContactsList) {
+        return <h2>Loading...</h2>
+    }
+
+    function onSubmit(formValues: Partial<FilterFormValues>) {
+        dispatch(Action[ReducersList.contactsFilter].update(formValues))
     }
 
     return (
@@ -57,7 +62,7 @@ export const FilterForm = memo(() => {
                             </Form.Select>
                         </Col>
                         <Col>
-                            <Button variant={'primary'} type={'submit'}>Применить</Button>
+                            <Button variant="primary" type="submit">Применить</Button>
                         </Col>
                     </Row>
                 </Form>

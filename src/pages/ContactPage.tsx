@@ -1,24 +1,27 @@
-import React from 'react';
-import { useSelector } from 'react-redux'
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactCard} from 'src/components/ContactCard';
-import {Empty} from 'src/components/Empty';
-
-import { selector } from 'src/store/contacts'
-import { ContactDto } from 'src/types/dto/ContactDto'
+import React from 'react'
+import { Col, Row } from 'react-bootstrap'
+import { useParams } from 'react-router-dom'
+import { ContactCard } from 'src/components/ContactCard'
+import { Empty } from 'src/components/Empty'
+import { useGetContactQuery } from 'src/store/contact'
 
 export const ContactPage = () => {
 
-  const {contactId} = useParams<{ contactId: string }>();
+    const {contactId} = useParams<{ contactId: string }>()
 
-  const contact = useSelector(selector.byId(contactId as ContactDto['id']))
+    const {data: contacts} = useGetContactQuery()
 
-  return (
-    <Row xxl={3}>
-      <Col className={'mx-auto'}>
-        {contact ? <ContactCard contact={contact} /> : <Empty />}
-      </Col>
-    </Row>
-  );
-};
+    const contact = contacts && contacts.find(contact => contact.id === contactId)
+
+    if (!contact) {
+        return <h2>Loading...</h2>
+    }
+
+    return (
+        <Row xxl={3}>
+            <Col className={'mx-auto'}>
+                {contact ? <ContactCard contact={contact}/> : <Empty/>}
+            </Col>
+        </Row>
+    )
+}
