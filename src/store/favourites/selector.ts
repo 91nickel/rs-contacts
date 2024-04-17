@@ -1,8 +1,7 @@
-import slice from './slice'
-import { AppState } from 'src/store'
+import { AppState, ReducersList } from 'src/store'
 import { ContactDto } from 'src/types/dto/ContactDto'
 
-const SLICE_NAME = slice.name
+const SLICE_NAME = ReducersList.favouriteContacts
 
 export default {
     get: () => ({[SLICE_NAME]: state}: AppState) => state.data,
