@@ -3,38 +3,11 @@ import { Dispatch } from 'redux'
 import { AppState } from 'src/store'
 import { FilterFormValues } from 'src/components/FilterForm'
 import ReducersList from "src/store/reducers.list"
+import slice from './slice'
+import selector from './selector'
+import action from './action'
 
-const SLICE_NAME = ReducersList.contactsFilter
-const initialState: Partial<FilterFormValues> = {}
 
-export const slice = createSlice({
-    name: SLICE_NAME,
-    reducers: {
-        updated: (state, action: PayloadAction<Partial<FilterFormValues>>) => {
-            return {...state, ...action.payload}
-        },
-        cleared: () => {
-            return {...initialState}
-        },
-    },
-    initialState,
-})
+export default slice.reducer
 
-const {updated, cleared} = slice.actions
-
-const reducer = slice.reducer
-
-const action = {
-    update: (filterValues: Partial<FilterFormValues>) => (dispatch: Dispatch) => {
-        dispatch(updated(filterValues))
-    },
-    clear: () => (dispatch: Dispatch) => {
-        dispatch(cleared())
-    },
-}
-
-const selector = {
-    get: () => ({[SLICE_NAME]: state}: AppState) => state,
-}
-
-export default {reducer, action, selector}
+export {action, selector}

@@ -6,19 +6,19 @@ import thunkMiddleware from 'redux-thunk'
 
 import ReducersList from './reducers.list'
 
-import Contacts from './contact'
-import GroupContacts from './group'
-import ContactsFilter from './filter'
-import FavouriteContacts from './favourites'
+import ContactsReducer, * as Contacts from './contact'
+import GroupContactsReducer, * as GroupContacts from './group'
+import FavouriteContactsReducer, * as FavouriteContacts from './favourites'
+import ContactsFilterReducer, * as ContactsFilter from './filter'
 
 import { logActionMiddleware } from './logActionMiddleware'
 
 const reducers = {
-    [Contacts.slice.reducerPath]: Contacts.slice.reducer,
-    [GroupContacts.slice.reducerPath]: GroupContacts.slice.reducer,
+    [Contacts.reducerPath]: ContactsReducer,
+    [GroupContacts.reducerPath]: GroupContactsReducer,
 
-    [ReducersList.contactsFilter]: ContactsFilter.reducer,
-    [ReducersList.favouriteContacts]: FavouriteContacts.reducer,
+    [ReducersList.contactsFilter]: ContactsFilterReducer,
+    [ReducersList.favouriteContacts]: FavouriteContactsReducer,
 }
 
 const reducer = persistReducer(
@@ -35,8 +35,8 @@ export const store = configureStore(
         reducer,
         devTools: true,
         middleware: [
-            Contacts.slice.middleware,
-            GroupContacts.slice.middleware,
+            Contacts.middleware,
+            GroupContacts.middleware,
             thunkMiddleware,
             logActionMiddleware,
         ]
