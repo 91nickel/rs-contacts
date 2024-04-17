@@ -3,6 +3,7 @@ enum Reducers {
     groupContacts = 'groupContacts',
     contactsFilter = 'contactsFilter',
     favouriteContacts = 'favouriteContacts',
+    auth = 'auth',
 }
 
 export default Reducers

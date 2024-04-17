@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { ContactCard } from 'src/components/ContactCard'
 import { Empty } from 'src/components/Empty'
 import { useGetContactQuery } from 'src/store/contact'
+import { ContactDto } from 'src/types/dto/ContactDto'
 
 export const ContactPage = () => {
 
@@ -20,7 +21,7 @@ export const ContactPage = () => {
     return (
         <Row xxl={3}>
             <Col className={'mx-auto'}>
-                {contact ? <ContactCard contact={contact}/> : <Empty/>}
+                {contact ? <ContactCard contact={contact} /> : <Empty/>}
             </Col>
         </Row>
     )
