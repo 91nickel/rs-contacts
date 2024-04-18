@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { ActionReducerMapBuilder, createAsyncThunk } from '@reduxjs/toolkit'
 import { name, IState, ContactDto } from './const'
-import { slice } from '.'
+import slice from './slice'
 
 const action = {
     add: (cid: ContactDto['id']) => (dispatch: Dispatch) => {

@@ -10,6 +10,7 @@ import ContactsReducer, * as Contacts from './contact'
 import GroupContactsReducer, * as GroupContacts from './group'
 import FavouriteContactsReducer, * as FavouriteContacts from './favourites'
 import ContactsFilterReducer, * as ContactsFilter from './filter'
+import AuthReducer, * as Auth from './auth'
 
 import { logActionMiddleware } from './logActionMiddleware'
 
@@ -17,8 +18,9 @@ const reducers = {
     [Contacts.reducerPath]: ContactsReducer,
     [GroupContacts.reducerPath]: GroupContactsReducer,
 
-    [ReducersList.contactsFilter]: ContactsFilterReducer,
-    [ReducersList.favouriteContacts]: FavouriteContactsReducer,
+    [Auth.name]: AuthReducer,
+    [ContactsFilter.name]: ContactsFilterReducer,
+    [FavouriteContacts.name]: FavouriteContactsReducer,
 }
 
 const reducer = persistReducer(
@@ -51,15 +53,15 @@ window.persistor = persistor
 export const Selector = {
     // [ReducersList.contacts]: Contacts.selector,
     // [ReducersList.groupContacts]: GroupContacts.selector,
-    [ReducersList.contactsFilter]: ContactsFilter.selector,
-    [ReducersList.favouriteContacts]: FavouriteContacts.selector,
+    [ContactsFilter.name]: ContactsFilter.selector,
+    [FavouriteContacts.name]: FavouriteContacts.selector,
 }
 
 export const Action = {
     // [ReducersList.contacts]: Contacts.action,
     // [ReducersList.groupContacts]: GroupContacts.action,
-    [ReducersList.contactsFilter]: ContactsFilter.action,
-    [ReducersList.favouriteContacts]: FavouriteContacts.action,
+    [ContactsFilter.name]: ContactsFilter.action,
+    [FavouriteContacts.name]: FavouriteContacts.action,
 }
 
 export type AppState = ReturnType<typeof reducer>

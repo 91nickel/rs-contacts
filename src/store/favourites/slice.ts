@@ -7,7 +7,7 @@ const initialState: IState = {
     isLoading: false,
 }
 
-export default createSlice({
+const slice = createSlice({
     name,
     initialState,
     reducers: {
@@ -26,3 +26,5 @@ export default createSlice({
     },
     extraReducers,
 })
+
+export default slice
