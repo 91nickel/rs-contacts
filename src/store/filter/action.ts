@@ -1,11 +1,11 @@
-import { FilterFormValues } from 'src/components/FilterForm'
 import { Dispatch } from 'redux'
-import slice from 'src/store/filter/slice'
+import { IState } from './const'
+import slice from './slice'
 
 const {updated, cleared} = slice.actions
 
 export default {
-    update: (filterValues: Partial<FilterFormValues>) => (dispatch: Dispatch) => {
+    update: (filterValues: IState) => (dispatch: Dispatch) => {
         dispatch(updated(filterValues))
     },
     clear: () => (dispatch: Dispatch) => {

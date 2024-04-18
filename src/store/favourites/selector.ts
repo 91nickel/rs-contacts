@@ -1,10 +1,10 @@
-import { AppState, ReducersList } from 'src/store'
-import { ContactDto } from 'src/types/dto/ContactDto'
+import { AppState } from 'src/store'
+import { name, ContactDto } from './const'
 
-const SLICE_NAME = ReducersList.favouriteContacts
-
-export default {
-    get: () => ({[SLICE_NAME]: state}: AppState) => state.data,
-    isLoading: () => ({[SLICE_NAME]: state}: AppState) => state.isLoading,
-    includes: (id: ContactDto['id']) => ({[SLICE_NAME]: state}: AppState) => state.data.includes(id),
+const selector = {
+    get: () => ({[name]: state}: AppState) => state.data,
+    isLoading: () => ({[name]: state}: AppState) => state.isLoading,
+    includes: (id: ContactDto['id']) => ({[name]: state}: AppState) => state.data.includes(id),
 }
+
+export default selector
