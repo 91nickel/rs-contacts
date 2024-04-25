@@ -1,21 +1,27 @@
-import React from 'react';
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactCard} from 'src/components/ContactCard';
-import {Empty} from 'src/components/Empty';
-import { useAppSelector } from 'src/store/hooks'
+import React from 'react'
+import { Col, Row } from 'react-bootstrap'
+import { useParams } from 'react-router-dom'
+import { ContactCard } from 'src/components/ContactCard'
+import { Empty } from 'src/components/Empty'
+import { useGetContactQuery } from 'src/store/contact'
 
 export const ContactPage = () => {
 
-  const {contactId} = useParams<{ contactId: string }>();
+    const {contactId} = useParams<{ contactId: string }>()
 
-  const contact = useAppSelector(state => state.contacts.find(c => c.id === contactId))
+    const {data: contacts} = useGetContactQuery()
 
-  return (
-    <Row xxl={3}>
-      <Col className={'mx-auto'}>
-        {contact ? <ContactCard contact={contact} /> : <Empty />}
-      </Col>
-    </Row>
-  );
-};
+    const contact = contacts && contacts.find(contact => contact.id === contactId)
+
+    if (!contact) {
+        return <h2>Loading...</h2>
+    }
+
+    return (
+        <Row xxl={3}>
+            <Col className={'mx-auto'}>
+                {contact ? <ContactCard contact={contact} /> : <Empty/>}
+            </Col>
+        </Row>
+    )
+}

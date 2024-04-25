@@ -1,10 +1,15 @@
 import React, { memo } from 'react'
+import { useSelector } from 'react-redux'
 import { Col, Row } from 'react-bootstrap'
+
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import { useAppSelector } from 'src/store/hooks'
+
+import { ReducersList, Selector } from 'src/store'
+import { useGetContactQuery } from 'src/store/contact'
+import { useGetGroupContactsQuery } from 'src/store/group'
 
 function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filterValue: Partial<FilterFormValues>) {
 
@@ -23,7 +28,6 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 
     if (filterValue.groupId) {
         const findGroupContacts = groupContacts.find(({id}) => id === filterValue.groupId)
-
         if (findGroupContacts) {
             findContacts = findContacts.filter(({id}) => (
                 findGroupContacts.contactIds.includes(id)
@@ -36,24 +40,33 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
 
 export const ContactListPage = memo(() => {
 
-    const contacts = useAppSelector((state) => state.contacts)
-    const groupContacts = useAppSelector((state) => state.groupContacts)
-    const contactsFilter = useAppSelector((state) => state.contactsFilter)
+    // const contacts = useSelector(Selector[ReducersList.contacts].get())
+
+    const {data: contacts} = useGetContactQuery()
+    const {data: groupContacts} = useGetGroupContactsQuery()
+
+    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+
+    if (!contacts || !groupContacts) {
+        return <h2>Loading...</h2>
+    }
 
     const contactsFiltered = filter(contacts, groupContacts, contactsFilter)
+
+    const cards = contactsFiltered.map((contact: ContactDto) => (
+        <Col key={contact.id}>
+            <ContactCard contact={contact} withLink/>
+        </Col>
+    ))
 
     return (
         <Row xxl={1}>
             <Col className="mb-3">
-                <FilterForm />
+                <FilterForm/>
             </Col>
             <Col>
                 <Row xxl={4} className="g-4">
-                    {contactsFiltered.map((contact: ContactDto) => (
-                        <Col key={contact.id}>
-                            <ContactCard contact={contact} withLink/>
-                        </Col>
-                    ))}
+                    {cards}
                 </Row>
             </Col>
         </Row>

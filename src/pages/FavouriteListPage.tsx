@@ -1,13 +1,21 @@
 import React, { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/store/hooks'
+
+import { Selector, ReducersList } from 'src/store'
+import { useGetContactQuery } from 'src/store/contact'
 
 export const FavouriteListPage = memo(() => {
 
-    const contactsList = useAppSelector((state) => state.contacts)
-    const favouriteContactsList = useAppSelector((state) => state.favouriteContacts)
-    const contacts = contactsList.filter(({id}) => favouriteContactsList.includes(id))
+    const {data: contactsList} = useGetContactQuery()
+    const favouriteContactsList = useSelector(Selector[ReducersList.favouriteContacts].get())
+
+    if (!contactsList) {
+        return <h2>Loading...</h2>
+    }
+
+    const contacts = contactsList && contactsList.filter(({id}) => favouriteContactsList.includes(id))
 
     return (
         <Row xxl={4} className="g-4">

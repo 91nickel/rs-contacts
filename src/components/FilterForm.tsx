@@ -1,27 +1,32 @@
-import { Formik } from 'formik'
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import React, { memo } from 'react'
-import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import { updateContactsFilterActionCreator } from 'src/store/actions'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
+import { Formik } from 'formik'
+
+import { useAppDispatch } from 'src/store/hooks'
+
+import { Action, Selector, ReducersList } from 'src/store'
+import { useGetGroupContactsQuery } from 'src/store/group'
 
 export interface FilterFormValues {
     name: string,
     groupId: string
 }
 
-// interface FilterFormProps extends FormikConfig<Partial<FilterFormValues>> {
-//   groupContactsList: GroupContactsDto[]
-// }
-
 export const FilterForm = memo(() => {
 
     const dispatch = useAppDispatch()
-    const groupContactsList: GroupContactsDto[] = useAppSelector((state) => state.groupContacts)
-    const contactsFilter: Partial<FilterFormValues> = useAppSelector((state) => state.contactsFilter)
 
-    function onSubmit(fv: Partial<FilterFormValues>) {
-        dispatch(updateContactsFilterActionCreator(fv))
+    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+
+    // const groupContactsList = useSelector(Selector[ReducersList.groupContacts].get())
+    const {data: groupContactsList} = useGetGroupContactsQuery()
+    if (!groupContactsList) {
+        return <h2>Loading...</h2>
+    }
+
+    function onSubmit(formValues: Partial<FilterFormValues>) {
+        dispatch(Action[ReducersList.contactsFilter].update(formValues))
     }
 
     return (
@@ -57,7 +62,7 @@ export const FilterForm = memo(() => {
                             </Form.Select>
                         </Col>
                         <Col>
-                            <Button variant={'primary'} type={'submit'}>Применить</Button>
+                            <Button variant="primary" type="submit">Применить</Button>
                         </Col>
                     </Row>
                 </Form>
