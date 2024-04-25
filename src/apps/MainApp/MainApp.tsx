@@ -8,6 +8,7 @@ import './MainApp.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import { useAppDispatch } from 'src/store/hooks'
 import * as Auth from 'src/store/auth'
+import AppRoutes from 'src/routes'
 
 export const MainApp = () => {
 
@@ -22,34 +23,7 @@ export const MainApp = () => {
             breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
             minBreakpoint="xxs"
         >
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Layout/>}>
-                        <Route index element={
-                            <ContactListPage/>
-                        }/>
-                        <Route path="contact">
-                            <Route index element={
-                                <ContactListPage/>
-                            }/>
-                            <Route path=":contactId" element={
-                                <ContactPage/>
-                            }/>
-                        </Route>
-                        <Route path="groups">
-                            <Route index element={
-                                <GroupListPage/>
-                            }/>
-                            <Route path=":groupId" element={
-                                <GroupPage/>
-                            }/>
-                        </Route>
-                        <Route path="favorit" element={
-                            <FavouriteListPage/>
-                        }/>
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <AppRoutes/>
         </ThemeProvider>
     )
 }

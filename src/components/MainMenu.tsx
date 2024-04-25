@@ -3,6 +3,7 @@ import { Container, Nav, Navbar, Button } from 'react-bootstrap'
 import { useAppDispatch } from 'src/store/hooks'
 import { asyncFunctionActionCreator } from 'src/store/actions'
 import * as Auth from 'src/store/auth'
+import { testAuthCredentials } from 'src/store/auth'
 
 export const MainMenu = () => {
     const dispatch = useAppDispatch();
@@ -12,11 +13,11 @@ export const MainMenu = () => {
     }
 
     function handleCorrectLogin () {
-        return dispatch(Auth.action.login({login: 'login', password: '1234'}))
+        return dispatch(Auth.action.login(testAuthCredentials))
     }
 
     function handleIncorrectLogin () {
-        return dispatch(Auth.action.login({login: 'login', password: '1234'}))
+        return dispatch(Auth.action.login(testAuthCredentials))
     }
 
     function handleLogout () {

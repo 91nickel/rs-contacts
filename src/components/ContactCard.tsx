@@ -8,6 +8,7 @@ import { Selector, ReducersList, Action } from 'src/store'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import Reducers from 'src/store/reducers.list'
 import { useAppDispatch } from 'src/store/hooks'
+import { RoutesList } from 'src/routes'
 
 interface ContactCardProps {
     contact: ContactDto,
@@ -38,7 +39,7 @@ export const ContactCard = memo<ContactCardProps>((
                 <Card.Img variant="top" src={photo}/>
                 <Card.Body>
                     <Card.Title>
-                        {withLink ? <Link to={`/contact/${id}`}>{name}</Link> : name}
+                        {withLink ? <Link to={`/${RoutesList.contacts}/${id}`}>{name}</Link> : name}
                     </Card.Title>
                     <Card.Body>
                         <ListGroup>

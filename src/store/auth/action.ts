@@ -1,9 +1,27 @@
 import { Dispatch } from 'redux'
-import { ActionReducerMapBuilder, createAsyncThunk } from '@reduxjs/toolkit'
-import { name, IState, ILoginDto, IAuthResponseData } from './const'
+import { ActionReducerMapBuilder, AsyncThunk, AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit'
+import {
+    name,
+    IState,
+    ILoginDto,
+    IAuthResponseData,
+    testAuthCredentials,
+    INITIAL_TOKEN_VALUE,
+    TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN
+} from './const'
 import slice from './slice'
 import { isSuccessResponse, Response } from 'src/types/response'
 import { AppState } from 'src/store'
+
+enum Endpoints {
+    login = 'login',
+    check = 'check',
+    logout = 'logout',
+}
+
+enum AuthErrors {
+    forbidden = '403 Forbidden',
+}
 
 export const action = {
     // add: (cid: ContactDto['id']) => (dispatch: Dispatch) => {
@@ -15,22 +33,22 @@ export const action = {
     // clear: () => (dispatch: Dispatch) => {
     //     dispatch(slice.actions.cleared())
     // },
-    login: createAsyncThunk(
-        `${name}/login`,
+    [Endpoints.login]: createAsyncThunk(
+        `${name}/${Endpoints.login}`,
         async (payload: ILoginDto, thunkAPI) => {
             return auth(payload)
         },
     ),
-    check: createAsyncThunk(
-        `${name}/check`,
+    [Endpoints.check]: createAsyncThunk(
+        `${name}/${Endpoints.check}`,
         async (_, thunkAPI) => {
             const state = (thunkAPI.getState() as AppState)[name]
             const {accessToken} = state
             return check(accessToken)
         },
     ),
-    logout: createAsyncThunk(
-        `${name}/logout`,
+    [Endpoints.logout]: createAsyncThunk(
+        `${name}/${Endpoints.logout}`,
         async (_, thunkAPI) => {
             const state = (thunkAPI.getState() as AppState)[name]
             const {accessToken} = state
@@ -43,13 +61,13 @@ export default action
 
 export function extraReducers(builder: ActionReducerMapBuilder<IState>) {
     builder.addMatcher(
-        action.login.pending.match,
+        action[Endpoints.login].pending.match,
         (state) => {
             return {...state, isLoading: true}
         },
     )
     builder.addMatcher(
-        action.login.fulfilled.match,
+        action[Endpoints.login].fulfilled.match,
         (state, action) => {
             if (isSuccessResponse(action.payload)) {
                 const {accessToken, refreshToken} = action.payload.data
@@ -64,8 +82,8 @@ export function extraReducers(builder: ActionReducerMapBuilder<IState>) {
                 }
             }
             return {
-                accessToken: '',
-                refreshToken: '',
+                accessToken: INITIAL_TOKEN_VALUE,
+                refreshToken: INITIAL_TOKEN_VALUE,
                 error: action.payload.message,
                 isAuthenticated: false,
                 isLoading: false,
@@ -73,7 +91,7 @@ export function extraReducers(builder: ActionReducerMapBuilder<IState>) {
         },
     )
     builder.addMatcher(
-        action.login.rejected.match,
+        action[Endpoints.login].rejected.match,
         (state, action) => {
             return {
                 ...state,
@@ -84,54 +102,54 @@ export function extraReducers(builder: ActionReducerMapBuilder<IState>) {
     )
 
     builder.addMatcher(
-        action.check.pending.match,
+        action[Endpoints.check].pending.match,
         (state, action) => ({...state, isLoading: true}),
     )
     builder.addMatcher(
-        action.check.fulfilled.match,
+        action[Endpoints.check].fulfilled.match,
         (state, action) => ({...state, isAuthenticated: action.payload, isLoading: false}),
     )
     builder.addMatcher(
-        action.check.rejected.match,
+        action[Endpoints.check].rejected.match,
         (state, action) => ({...state, isAuthenticated: false, isLoading: false}),
     )
 
     builder.addMatcher(
-        action.logout.pending.match,
+        action[Endpoints.logout].pending.match,
         (state, action) => ({...state, isLoading: true}),
     )
     builder.addMatcher(
-        action.logout.fulfilled.match,
+        action[Endpoints.logout].fulfilled.match,
         (state) => {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
-            return {...state, accessToken: '', refreshToken: '', isAuthenticated: false, isLoading: false}
+            return {...state, accessToken: INITIAL_TOKEN_VALUE, refreshToken: INITIAL_TOKEN_VALUE, isAuthenticated: false, isLoading: false}
         },
     )
     builder.addMatcher(
-        action.logout.rejected.match,
+        action[Endpoints.logout].rejected.match,
         (state, action) => {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
-            return {...state, accessToken: '', refreshToken: '', isAuthenticated: false, isLoading: false}
+            return {...state, accessToken: INITIAL_TOKEN_VALUE, refreshToken: INITIAL_TOKEN_VALUE, isAuthenticated: false, isLoading: false}
         },
     )
 }
 
 function auth(dto: ILoginDto): Promise<Response<IAuthResponseData>> {
-    const isSuccess = dto.login === 'login' && dto.password === '1234'
+    const isSuccess = dto === testAuthCredentials
     return new Promise((res, rej) => {
         setTimeout(() => {
             console.log('auth', isSuccess)
             isSuccess
-                ? res({success: true, data: {accessToken: '1234', refreshToken: '5678'}})
-                : rej({success: false, message: '403 Forbidden'})
+                ? res({success: true, data: {accessToken: TEST_ACCESS_TOKEN, refreshToken: TEST_REFRESH_TOKEN}})
+                : rej({success: false, message: AuthErrors.forbidden})
         }, 500)
     })
 }
 
 function check(token: string): Promise<boolean> | boolean {
-    const isSuccess = token === '1234'
+    const isSuccess = token === TEST_ACCESS_TOKEN
     if (!token) {
         console.log('check', false, 'no token')
         return false
