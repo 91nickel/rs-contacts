@@ -3,30 +3,35 @@ import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { Formik } from 'formik'
 
-import { useAppDispatch } from 'src/store/hooks'
+// import { useAppDispatch } from 'src/store/hooks'
 
-import { Action, Selector, ReducersList } from 'src/store'
-import { useGetGroupContactsQuery } from 'src/store/group'
+// import { Action, Selector, ReducersList } from 'src/store'
+// import { useGetGroupContactsQuery } from 'src/store/group'
+import { observer } from 'mobx-react-lite'
+import store from 'src/store'
 
 export interface FilterFormValues {
     name: string,
     groupId: string
 }
 
-export const FilterForm = memo(() => {
+export const FilterForm = observer(memo(() => {
 
-    const dispatch = useAppDispatch()
+    // const dispatch = useAppDispatch()
 
-    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+    // const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
 
     // const groupContactsList = useSelector(Selector[ReducersList.groupContacts].get())
-    const {data: groupContactsList} = useGetGroupContactsQuery()
+    // const {data: groupContactsList} = useGetGroupContactsQuery()
+    const {filter: contactsFilter, groupContacts: groupContactsList} = store
+
     if (!groupContactsList) {
         return <h2>Loading...</h2>
     }
 
     function onSubmit(formValues: Partial<FilterFormValues>) {
-        dispatch(Action[ReducersList.contactsFilter].update(formValues))
+        console.log('onSubmit', formValues)
+        // dispatch(Action[ReducersList.contactsFilter].update(formValues))
     }
 
     return (
@@ -69,4 +74,4 @@ export const FilterForm = memo(() => {
             )}
         </Formik>
     )
-})
+}))

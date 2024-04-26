@@ -1,11 +1,15 @@
 import React, { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
-import { useGetGroupContactsQuery } from 'src/store/group'
+// import { useGetGroupContactsQuery } from 'src/store/group'
+import store from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-export const GroupListPage = memo(() => {
+export const GroupListPage = observer(memo(() => {
     // const groupContacts = useSelector(Selector[ReducersList.groupContacts].get())
-    const {data: groupContacts} = useGetGroupContactsQuery()
+    // const {data: groupContacts} = useGetGroupContactsQuery()
+    const {groupContacts} = store
+
     if (!groupContacts) {
         return <h2>Loading...</h2>
     }
@@ -19,4 +23,4 @@ export const GroupListPage = memo(() => {
             ))}
         </Row>
     )
-})
+}))

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client'
 import './index.scss'
 import { MainApp } from './apps/MainApp'
 import reportWebVitals from './reportWebVitals'
-import { Provider as StoreProvider } from 'react-redux/es/exports'
-import { persistor, store } from 'src/store'
-import { PersistGate } from 'redux-persist/integration/react'
+// import { Provider as StoreProvider } from 'react-redux/es/exports'
+// import { persistor, store } from 'src/store'
+// import { PersistGate } from 'redux-persist/integration/react'
 import { ToastContainer } from 'react-toastify'
 
 const root = ReactDOM.createRoot(
@@ -14,12 +14,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
     // <React.StrictMode>
-    <StoreProvider store={store}>
-        <PersistGate persistor={persistor} loading={<h1>Loading...</h1>}>
-            <MainApp/>
-        </PersistGate>
+    // <StoreProvider store={store}>
+    <>
+        {/*<PersistGate persistor={persistor} loading={<h1>Loading...</h1>}>*/}
+        <MainApp/>
+        {/*</PersistGate>*/}
         <ToastContainer/>
-    </StoreProvider>
+    </>
+    // </StoreProvider>
     // </React.StrictMode>
 )
 

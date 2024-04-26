@@ -5,16 +5,20 @@ import { useParams } from 'react-router-dom'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
+import store from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-import { useGetContactQuery } from 'src/store/contact'
-import { useGetGroupContactsQuery } from 'src/store/group'
+// import { useGetContactQuery } from 'src/store/contact'
+// import { useGetGroupContactsQuery } from 'src/store/group'
 
-export const GroupPage = memo(() => {
+export const GroupPage = observer(memo(() => {
     const {groupId} = useParams<{ groupId: string }>()
 
     // const groupContacts = useSelector(Selector[ReducersList.groupContacts].byId(groupId as GroupContactsDto['id']))!
-    const {data: groupContactsList} = useGetGroupContactsQuery()
-    const {data: contactsList} = useGetContactQuery()
+    // const {data: groupContactsList} = useGetGroupContactsQuery()
+    // const {data: contactsList} = useGetContactQuery()
+
+    const {contacts: contactsList, groupContacts: groupContactsList} = store
 
     if (!contactsList || !groupContactsList) {
         return <h2>Loading...</h2>
@@ -48,4 +52,4 @@ export const GroupPage = memo(() => {
             </Col>
         </Row>
     )
-})
+}))

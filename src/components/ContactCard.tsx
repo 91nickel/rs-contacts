@@ -1,36 +1,40 @@
 import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import { Button, Card, ListGroup } from 'react-bootstrap'
 
-import { Selector, ReducersList, Action } from 'src/store'
+// import { Selector, ReducersList, Action } from 'src/store'
 
 import { ContactDto } from 'src/types/dto/ContactDto'
-import Reducers from 'src/store/reducers.list'
-import { useAppDispatch } from 'src/store/hooks'
+// import Reducers from 'src/store/reducers.list'
+// import { useAppDispatch } from 'src/store/hooks'
 import { RoutesList } from 'src/routes'
+import { observer } from 'mobx-react-lite'
+import store from 'src/store'
 
 interface ContactCardProps {
     contact: ContactDto,
     withLink?: boolean,
 }
 
-export const ContactCard = memo<ContactCardProps>((
+export const ContactCard = observer(memo<ContactCardProps>((
     {
         contact: {photo, id, name, phone, birthday, address},
         withLink,
     },
     ) => {
-        const dispatch = useAppDispatch()
+        // const dispatch = useAppDispatch()
 
-        const isInFavorites = useSelector(Selector[ReducersList.favouriteContacts].includes(id))
-        const isLoading = useSelector(Selector[ReducersList.favouriteContacts].isLoading())
+        // const isInFavorites = useSelector(Selector[ReducersList.favouriteContacts].includes(id))
+        // const isLoading = useSelector(Selector[ReducersList.favouriteContacts].isLoading())
 
         function handleFavourites() {
             if (isInFavorites) {
-                dispatch(Action[Reducers.favouriteContacts].delete(id))
+                store.removeContactFromFavourites()
+                // dispatch(Action[Reducers.favouriteContacts].delete(id))
             } else {
-                dispatch(Action[Reducers.favouriteContacts].addAsync(id))
+                store.addContactToFavourites()
+                // dispatch(Action[Reducers.favouriteContacts].addAsync(id))
             }
         }
 
@@ -55,4 +59,4 @@ export const ContactCard = memo<ContactCardProps>((
             </Card>
         )
     },
-)
+))

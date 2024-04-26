@@ -1,15 +1,17 @@
 import React, { memo } from 'react'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
+import { observer } from 'mobx-react-lite'
 import { Col, Row } from 'react-bootstrap'
 
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
+import store from 'src/store'
 
-import { ReducersList, Selector } from 'src/store'
-import { useGetContactQuery } from 'src/store/contact'
-import { useGetGroupContactsQuery } from 'src/store/group'
+// import { ReducersList, Selector } from 'src/store'
+// import { useGetContactQuery } from 'src/store/contact'
+// import { useGetGroupContactsQuery } from 'src/store/group'
 
 function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filterValue: Partial<FilterFormValues>) {
 
@@ -38,14 +40,15 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
     return findContacts
 }
 
-export const ContactListPage = memo(() => {
+export const ContactListPage = observer(memo(() => {
 
     // const contacts = useSelector(Selector[ReducersList.contacts].get())
 
-    const {data: contacts} = useGetContactQuery()
-    const {data: groupContacts} = useGetGroupContactsQuery()
+    // const {data: contacts} = useGetContactQuery()
+    // const {data: groupContacts} = useGetGroupContactsQuery()
 
-    const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+    // const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
+    const {contacts, groupContacts, filter: contactsFilter} = store
 
     if (!contacts || !groupContacts) {
         return <h2>Loading...</h2>
@@ -71,4 +74,4 @@ export const ContactListPage = memo(() => {
             </Col>
         </Row>
     )
-})
+}))

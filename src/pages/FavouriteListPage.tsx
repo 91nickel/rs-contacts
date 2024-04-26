@@ -3,13 +3,16 @@ import { Col, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { ContactCard } from 'src/components/ContactCard'
 
-import { Selector, ReducersList } from 'src/store'
-import { useGetContactQuery } from 'src/store/contact'
+// import { Selector, ReducersList } from 'src/store'
+// import { useGetContactQuery } from 'src/store/contact'
+import store from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-export const FavouriteListPage = memo(() => {
+export const FavouriteListPage = observer(memo(() => {
 
-    const {data: contactsList} = useGetContactQuery()
-    const favouriteContactsList = useSelector(Selector[ReducersList.favouriteContacts].get())
+    // const {data: contactsList} = useGetContactQuery()
+    // const favouriteContactsList = useSelector(Selector[ReducersList.favouriteContacts].get())
+    const {contacts: contactsList, favourites: favouriteContactsList} = store
 
     if (!contactsList) {
         return <h2>Loading...</h2>
@@ -26,4 +29,4 @@ export const FavouriteListPage = memo(() => {
             ))}
         </Row>
     )
-})
+}))
