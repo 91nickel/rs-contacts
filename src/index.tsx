@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals'
 // import { PersistGate } from 'redux-persist/integration/react'
 import { ToastContainer } from 'react-toastify'
 
+// import { autorun, reaction, when } from 'mobx'
+
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
 )

@@ -6,7 +6,7 @@ node_modules
 /.pnp
 .pnp.js
 .env
-*/__data__/*.json
+#*/__data__/*.json
 dist
 
 # testing

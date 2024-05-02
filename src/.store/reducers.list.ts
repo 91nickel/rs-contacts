@@ -1,6 +1,6 @@
 enum Reducers {
     contacts = 'contacts',
-    groupContacts = 'groupContacts',
+    groupContacts = 'groups',
     contactsFilter = 'contactsFilter',
     favouriteContacts = 'favouriteContacts',
     auth = 'auth',

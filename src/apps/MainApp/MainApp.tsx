@@ -6,16 +6,19 @@ import { ContactListPage, GroupPage, ContactPage, FavouriteListPage, GroupListPa
 
 import './MainApp.scss'
 import 'react-toastify/dist/ReactToastify.css'
-import { useAppDispatch } from 'src/store/hooks'
-import * as Auth from 'src/store/auth'
+// import { useAppDispatch } from 'src/store/hooks'
+// import * as Auth from 'src/store/auth'
 import AppRoutes from 'src/routes'
+import store from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-export const MainApp = () => {
+export const MainApp = observer(() => {
 
-    const dispatch = useAppDispatch()
+    // const dispatch = useAppDispatch()
+    // const {} = store
 
     useEffect(() => {
-        dispatch(Auth.action.check())
+        store.checkAuth()
     }, [])
 
     return (
@@ -26,4 +29,4 @@ export const MainApp = () => {
             <AppRoutes/>
         </ThemeProvider>
     )
-}
+})

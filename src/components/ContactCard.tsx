@@ -10,31 +10,30 @@ import { ContactDto } from 'src/types/dto/ContactDto'
 // import { useAppDispatch } from 'src/store/hooks'
 import { RoutesList } from 'src/routes'
 import { observer } from 'mobx-react-lite'
-import store from 'src/store'
+import store, { newStore, StoreList } from 'src/store'
 
 interface ContactCardProps {
     contact: ContactDto,
     withLink?: boolean,
 }
 
-export const ContactCard = observer(memo<ContactCardProps>((
+export const ContactCard = observer((
     {
         contact: {photo, id, name, phone, birthday, address},
-        withLink,
-    },
-    ) => {
-        // const dispatch = useAppDispatch()
+        withLink
+    }: ContactCardProps) => {
 
-        // const isInFavorites = useSelector(Selector[ReducersList.favouriteContacts].includes(id))
-        // const isLoading = useSelector(Selector[ReducersList.favouriteContacts].isLoading())
+        const favouritesStore = newStore[StoreList.favourites];
+        const {data: favourites} = favouritesStore
+
+        const isInFavourites = favourites.includes(id)
+        const isLoading = false
 
         function handleFavourites() {
-            if (isInFavorites) {
-                store.removeContactFromFavourites()
-                // dispatch(Action[Reducers.favouriteContacts].delete(id))
+            if (isInFavourites) {
+                favouritesStore.add(id)
             } else {
-                store.addContactToFavourites()
-                // dispatch(Action[Reducers.favouriteContacts].addAsync(id))
+                favouritesStore.remove(id)
             }
         }
 
@@ -53,10 +52,10 @@ export const ContactCard = observer(memo<ContactCardProps>((
                         </ListGroup>
                     </Card.Body>
                     <Button variant="success" onClick={handleFavourites} disabled={isLoading}>
-                        {isInFavorites ? '-' : '+'}
+                        {isInFavourites ? '-' : '+'}
                     </Button>
                 </Card.Body>
             </Card>
         )
     },
-))
+)

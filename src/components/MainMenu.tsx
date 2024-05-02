@@ -1,19 +1,16 @@
 import React from 'react'
-import { Container, Nav, Navbar, Button } from 'react-bootstrap'
-// import { useAppDispatch } from 'src/store/hooks'
-// import { asyncFunctionActionCreator } from 'src/store/actions'
-// import * as Auth from 'src/store/auth'
-// import { testAuthCredentials } from 'src/store/auth'
-import store from 'src/store'
+import { Button, Container, Nav, Navbar } from 'react-bootstrap'
+import store, { actions, newStore } from 'src/store'
 import { RoutesList } from 'src/routes'
 import { observer } from 'mobx-react-lite'
+import Reducers from 'src/store/store.list'
 
 export const MainMenu = observer(() => {
     // const dispatch = useAppDispatch();
 
     function handleThunkCall () {
         console.log('handleThunkCall()')
-        store.asyncFunction()
+        actions.asyncFunction()
         // return dispatch(asyncFunctionActionCreator())
     }
 
@@ -46,6 +43,7 @@ export const MainMenu = observer(() => {
                     <Nav.Link href={`/${RoutesList.favourite}`}>Избранное</Nav.Link>
                 </Nav>
                 <div>
+                    <div>Total: {newStore[Reducers.contacts].count}</div>
                     <Button variant="outline-primary" onClick={handleThunkCall}>Async Function</Button>
                     <Button variant="success" onClick={handleCorrectLogin}>Correct login</Button>
                     <Button variant="warning" onClick={handleIncorrectLogin}>Incorrect login</Button>

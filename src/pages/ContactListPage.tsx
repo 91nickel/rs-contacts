@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 // import { useSelector } from 'react-redux'
 import { observer } from 'mobx-react-lite'
 import { Col, Row } from 'react-bootstrap'
@@ -7,7 +7,7 @@ import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import store from 'src/store'
+import store, { StoreList, newStore } from 'src/store'
 
 // import { ReducersList, Selector } from 'src/store'
 // import { useGetContactQuery } from 'src/store/contact'
@@ -40,7 +40,7 @@ function filter(contacts: ContactDto[], groupContacts: GroupContactsDto[], filte
     return findContacts
 }
 
-export const ContactListPage = observer(memo(() => {
+export const ContactListPage = observer(() => {
 
     // const contacts = useSelector(Selector[ReducersList.contacts].get())
 
@@ -48,9 +48,11 @@ export const ContactListPage = observer(memo(() => {
     // const {data: groupContacts} = useGetGroupContactsQuery()
 
     // const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
-    const {contacts, groupContacts, filter: contactsFilter} = store
+    const {data: contacts, isLoading: contactsIsLoading} = newStore[StoreList.contacts]
+    const {data: groupContacts, isLoading: groupContactsIsLoading} = newStore[StoreList.groups]
+    const {data: contactsFilter} = newStore[StoreList.filter]
 
-    if (!contacts || !groupContacts) {
+    if (contactsIsLoading || groupContactsIsLoading) {
         return <h2>Loading...</h2>
     }
 
@@ -74,4 +76,4 @@ export const ContactListPage = observer(memo(() => {
             </Col>
         </Row>
     )
-}))
+})
