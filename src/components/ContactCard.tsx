@@ -1,16 +1,10 @@
-import React, { memo } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-// import { useSelector } from 'react-redux'
 import { Button, Card, ListGroup } from 'react-bootstrap'
-
-// import { Selector, ReducersList, Action } from 'src/store'
-
 import { ContactDto } from 'src/types/dto/ContactDto'
-// import Reducers from 'src/store/reducers.list'
-// import { useAppDispatch } from 'src/store/hooks'
 import { RoutesList } from 'src/routes'
 import { observer } from 'mobx-react-lite'
-import store, { newStore, StoreList } from 'src/store'
+import store, { StoreList } from 'src/store'
 
 interface ContactCardProps {
     contact: ContactDto,
@@ -20,20 +14,19 @@ interface ContactCardProps {
 export const ContactCard = observer((
     {
         contact: {photo, id, name, phone, birthday, address},
-        withLink
+        withLink,
     }: ContactCardProps) => {
 
-        const favouritesStore = newStore[StoreList.favourites];
-        const {data: favourites} = favouritesStore
+        const favouritesStore = store[StoreList.favourites]
+        const {data: favourites, isLoading} = favouritesStore
 
         const isInFavourites = favourites.includes(id)
-        const isLoading = false
 
         function handleFavourites() {
             if (isInFavourites) {
-                favouritesStore.add(id)
-            } else {
                 favouritesStore.remove(id)
+            } else {
+                favouritesStore.add(id)
             }
         }
 

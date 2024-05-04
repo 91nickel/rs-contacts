@@ -3,25 +3,19 @@ import service from 'src/service'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
 
 class Store {
-    data: GroupContactsDto[] = []
-    isLoading: boolean = false
+    @observable data: GroupContactsDto[] = []
+    @observable isLoading: boolean = false
 
     constructor() {
-        makeObservable(
-            this,
-            {
-                data: observable,
-                isLoading: observable,
-                count: computed,
-                fetch: flow,
-            }
-        )
+        makeObservable(this)
     }
 
+    @computed
     get count() {
         return this.data.length
     }
 
+    @flow
     * fetch() {
         this.isLoading = true
         this.data = yield service.group.fetch()

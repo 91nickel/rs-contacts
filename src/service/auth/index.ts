@@ -1,60 +1,90 @@
 import { isSuccessResponse, Response } from 'src/types/response'
 import {
     AuthErrors,
-    IAuthResponseData,
+    IAuthTokens,
     ILoginDto,
+    ACCESS_TOKEN_VAR_NAME,
+    REFRESH_TOKEN_VAR_NAME,
     TEST_ACCESS_TOKEN,
     TEST_REFRESH_TOKEN,
-    testAuthCredentials
+    testAuthCredentials, INITIAL_TOKEN_VALUE,
 } from './const'
 
+class Service {
 
-const service = {
+    private [ACCESS_TOKEN_VAR_NAME] = localStorage.getItem(ACCESS_TOKEN_VAR_NAME) || INITIAL_TOKEN_VALUE
+    private [REFRESH_TOKEN_VAR_NAME] = localStorage.getItem(REFRESH_TOKEN_VAR_NAME) || INITIAL_TOKEN_VALUE
 
-    login(dto: ILoginDto): Promise<Response<IAuthResponseData>> {
+    setTokens(dto: IAuthTokens): void {
+        this[ACCESS_TOKEN_VAR_NAME] = dto[ACCESS_TOKEN_VAR_NAME]
+        this[REFRESH_TOKEN_VAR_NAME] = dto[REFRESH_TOKEN_VAR_NAME]
+        localStorage.setItem(ACCESS_TOKEN_VAR_NAME, dto[ACCESS_TOKEN_VAR_NAME])
+        localStorage.setItem(REFRESH_TOKEN_VAR_NAME, dto[REFRESH_TOKEN_VAR_NAME])
+    }
+
+    clearTokens(): void {
+        this[ACCESS_TOKEN_VAR_NAME] = ''
+        this[REFRESH_TOKEN_VAR_NAME] = ''
+        localStorage.removeItem(ACCESS_TOKEN_VAR_NAME)
+        localStorage.removeItem(REFRESH_TOKEN_VAR_NAME)
+    }
+
+    async login(dto: ILoginDto): Promise<Response<IAuthTokens>> {
         const isSuccess = dto === testAuthCredentials
-        return new Promise((res, rej) => {
+        return await new Promise((res, rej) => {
             setTimeout(() => {
                 console.log('auth', isSuccess)
-                isSuccess
-                    ? res({success: true, data: {accessToken: TEST_ACCESS_TOKEN, refreshToken: TEST_REFRESH_TOKEN}})
-                    : rej({success: false, message: AuthErrors.forbidden})
+                if (isSuccess) {
+                    const result = {
+                        success: true,
+                        data: {accessToken: TEST_ACCESS_TOKEN, refreshToken: TEST_REFRESH_TOKEN},
+                    }
+                    this.setTokens(result.data)
+                    res(result)
+                } else {
+                    rej(new Error(AuthErrors.forbidden))
+                }
             }, 500)
         })
-    },
+    }
 
-    check(token: string): Promise<boolean> | boolean {
+    async check(): Promise<boolean> {
+        const token = this[ACCESS_TOKEN_VAR_NAME]
         const isSuccess = token === TEST_ACCESS_TOKEN
         if (!token) {
-            console.log('check', false, 'no token')
+            // console.log('check', false, 'no token')
             return false
         }
 
-        return new Promise((res, rej) => {
+        return await new Promise((res, rej) => {
             setTimeout(() => {
-                console.log('check', isSuccess)
-                isSuccess ? res(isSuccess) : rej(isSuccess)
+                // console.log('check', isSuccess)
+                isSuccess ? res(isSuccess) : rej(new Error(AuthErrors.internalServerError))
             }, 500)
         })
-    },
+    }
 
-    logout(token: string): Promise<boolean> | boolean {
+    async logout(): Promise<boolean> {
+        const token = this[ACCESS_TOKEN_VAR_NAME]
+
         const isSuccess = true
 
         if (!token) {
-            console.log('logout', false, 'no token')
-            return false
+            return true
         }
 
-        return new Promise((res, rej) => {
+        return await new Promise((res, rej) => {
             setTimeout(() => {
-                console.log('logout', isSuccess)
-                isSuccess ? res(isSuccess) : rej(isSuccess)
+                if (isSuccess) {
+                    this.clearTokens()
+                    res(isSuccess)
+                } else {
+                    rej(new Error(AuthErrors.internalServerError))
+                }
             }, 500)
         })
-    },
-
+    }
 }
 
-export default service
+export default Service
 

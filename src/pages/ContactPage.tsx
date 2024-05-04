@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom'
 import { ContactCard } from 'src/components/ContactCard'
 import { Empty } from 'src/components/Empty'
 // import { useGetContactQuery } from 'src/store/contact'
-import store, { newStore, StoreList } from 'src/store'
+import store, { StoreList } from 'src/store'
 import { observer } from 'mobx-react-lite'
 
 export const ContactPage = observer(() => {
 
     const {contactId} = useParams<{ contactId: string }>()
 
-    const {data: contacts, isLoading} = newStore[StoreList.contacts]
+    const {data: contacts, isLoading} = store[StoreList.contacts]
 
     const contact = contacts && contacts.find(contact => contact.id === contactId)
 

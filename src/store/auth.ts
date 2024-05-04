@@ -1,40 +1,92 @@
-import { makeObservable, computed, flow, observable, makeAutoObservable } from 'mobx'
-import service from 'src/service'
-import { INITIAL_TOKEN_VALUE } from 'src/service/auth/const'
-import { ILoginDto } from 'src/.store/auth/const'
+import { flow, makeObservable, observable } from 'mobx'
+import { auth as AuthService } from 'src/service'
+import { ILoginDto, IAuthTokens } from 'src/service/auth/const'
+import { isSuccessResponse, Response } from 'src/types/response'
 
-class Store {
-    accessToken = localStorage.getItem('accessToken') || INITIAL_TOKEN_VALUE
-    refreshToken = localStorage.getItem('refreshToken') || INITIAL_TOKEN_VALUE
-    isLoading = false
-    error = ''
-    isAuthenticated = false
+interface IStore {
+    error?: string,
+    isAuthenticated: boolean,
+    isLoading: boolean,
+    isInitiated: boolean,
+
+    check(): Generator<Promise<boolean>, void, boolean>
+
+    login(dto: ILoginDto): Generator<Promise<Response<IAuthTokens>>, void, Response<IAuthTokens>>
+
+    logout(): Generator<boolean, void, boolean>
+}
+
+class Store implements IStore {
+
+    private service = new AuthService()
+
+    @observable isLoading = false
+    @observable isAuthenticated = false
+    @observable isInitiated = false
+    @observable error = ''
 
     constructor() {
-        makeAutoObservable(this)
+        makeObservable(this)
     }
 
+    @flow
     * check() {
-        console.log('check()')
-        const data: boolean = yield service.auth.check(this.accessToken)
-        console.log(data)
+        try {
+            this.isLoading = true
+            this.isAuthenticated = yield this.service.check()
+        } catch (e: any) {
+            console.log(e.message)
+            this.error = e.message
+            this.isAuthenticated = false
+        } finally {
+            this.isInitiated = true
+            this.isLoading = false
+        }
     }
 
+    @flow
     * login(dto: ILoginDto) {
-        console.log('login()')
-        const data: Response = yield service.auth.login(dto)
-        console.log(data)
+        if (this.isAuthenticated)
+            return console.log('Authenticated')
+
+        try {
+            this.error = ''
+            this.isLoading = true
+
+            const response: Response<IAuthTokens> = yield this.service.login(dto)
+
+            if (isSuccessResponse(response)) {
+                this.isAuthenticated = response.success
+            } else {
+                if (response.message)
+                    this.error = response.message
+            }
+        } catch (e: any) {
+            console.log(this.error)
+            this.error = e.message
+        } finally {
+            this.isLoading = false
+        }
     }
 
+    @flow
     * logout() {
-        console.log('logout()')
-        const data: boolean = yield service.auth.logout(this.accessToken)
-        console.log(data)
+        if (!this.isAuthenticated)
+            return console.log('Not authenticated')
+
+        try {
+            this.isLoading = true
+            this.isAuthenticated = yield !this.service.logout()
+        } catch (e: any) {
+            console.log(e.message)
+            this.error = e.message
+        } finally {
+            this.isLoading = false
+        }
     }
 
 }
 
 const store = new Store()
-store.check()
 
 export default store

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
-import store, { newStore, StoreList } from 'src/store'
+import store, { StoreList } from 'src/store'
 import { observer } from 'mobx-react-lite'
 
 // import { useGetContactQuery } from 'src/store/contact'
@@ -18,8 +18,8 @@ export const GroupPage = observer(() => {
     // const {data: groupContactsList} = useGetGroupContactsQuery()
     // const {data: contactsList} = useGetContactQuery()
 
-    const {data: contactsList, isLoading: contactsIsLoading} = newStore[StoreList.contacts]
-    const {data: groupContactsList, isLoading: groupContactsIsLoading} = newStore[StoreList.groups]
+    const {data: contactsList, isLoading: contactsIsLoading} = store[StoreList.contacts]
+    const {data: groupContactsList, isLoading: groupContactsIsLoading} = store[StoreList.groups]
 
     if (contactsIsLoading || groupContactsIsLoading) {
         return <h2>Loading...</h2>

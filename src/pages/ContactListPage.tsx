@@ -7,7 +7,7 @@ import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import store, { StoreList, newStore } from 'src/store'
+import store, { StoreList } from 'src/store'
 
 // import { ReducersList, Selector } from 'src/store'
 // import { useGetContactQuery } from 'src/store/contact'
@@ -48,9 +48,9 @@ export const ContactListPage = observer(() => {
     // const {data: groupContacts} = useGetGroupContactsQuery()
 
     // const contactsFilter = useSelector(Selector[ReducersList.contactsFilter].get())
-    const {data: contacts, isLoading: contactsIsLoading} = newStore[StoreList.contacts]
-    const {data: groupContacts, isLoading: groupContactsIsLoading} = newStore[StoreList.groups]
-    const {data: contactsFilter} = newStore[StoreList.filter]
+    const {data: contacts, isLoading: contactsIsLoading} = store[StoreList.contacts]
+    const {data: groupContacts, isLoading: groupContactsIsLoading} = store[StoreList.groups]
+    const {data: contactsFilter} = store[StoreList.filter]
 
     if (contactsIsLoading || groupContactsIsLoading) {
         return <h2>Loading...</h2>

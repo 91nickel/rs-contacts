@@ -1,8 +1,9 @@
 import React from 'react'
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
-import { Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
-import store, { newStore, StoreList } from 'src/store'
+import { Formik } from 'formik'
+
+import store, { StoreList } from 'src/store'
 
 export interface FilterFormValues {
     name: string,
@@ -11,16 +12,15 @@ export interface FilterFormValues {
 
 export const FilterForm = observer(() => {
 
-    const {data: contactsFilter, update} = newStore[StoreList.filter]
-    const {data: groupContactsList, isLoading: groupsIsLoading} = newStore[StoreList.groups]
+    const {data: contactsFilter, update} = store[StoreList.filter]
+    const {data: groupContactsList, isLoading: groupsIsLoading} = store[StoreList.groups]
 
     if (groupsIsLoading) {
         return <h2>Loading...</h2>
     }
 
     function onSubmit(formValues: Partial<FilterFormValues>) {
-        console.log('onSubmit', formValues)
-        update(formValues)
+        store[StoreList.filter].update(formValues)
     }
 
     return (

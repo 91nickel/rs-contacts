@@ -5,15 +5,15 @@ import { ContactCard } from 'src/components/ContactCard'
 
 // import { Selector, ReducersList } from 'src/store'
 // import { useGetContactQuery } from 'src/store/contact'
-import store, { newStore, StoreList } from 'src/store'
+import store, { StoreList } from 'src/store'
 import { observer } from 'mobx-react-lite'
 
 export const FavouriteListPage = observer(() => {
 
     // const {data: contactsList} = useGetContactQuery()
     // const favouriteContactsList = useSelector(Selector[ReducersList.favouriteContacts].get())
-    const {data: contactsList, isLoading} = newStore[StoreList.contacts]
-    const {data: favouriteContactsList} = newStore[StoreList.favourites]
+    const {data: contactsList, isLoading} = store[StoreList.contacts]
+    const {data: favouriteContactsList} = store[StoreList.favourites]
 
     if (isLoading) {
         return <h2>Loading...</h2>
