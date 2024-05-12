@@ -1,44 +1,69 @@
 import React from 'react'
-import { Container, Nav, Navbar, Button } from 'react-bootstrap'
-import { useAppDispatch } from 'src/store/hooks'
-import { asyncFunctionActionCreator } from 'src/store/actions'
-import * as Auth from 'src/store/auth'
-import { testAuthCredentials } from 'src/store/auth'
+import { Button, Container, Nav, Navbar } from 'react-bootstrap'
+import store, { actions, StoreList } from 'src/store'
+import { RoutesList } from 'src/routes'
+import { observer } from 'mobx-react-lite'
+import { testAuthCredentials } from 'src/service/auth/const'
 
-export const MainMenu = () => {
-    const dispatch = useAppDispatch();
+export const MainMenu = observer(() => {
+    const {isAuthenticated, isLoading} = store[StoreList.auth]
 
-    function handleThunkCall () {
-        return dispatch(asyncFunctionActionCreator())
+    function handleThunkCall() {
+        actions.asyncFunction().then(r => console.log(r))
     }
 
-    function handleCorrectLogin () {
-        return dispatch(Auth.action.login(testAuthCredentials))
+    function handleCorrectLogin() {
+        store[StoreList.auth].login(testAuthCredentials)
     }
 
-    function handleIncorrectLogin () {
-        return dispatch(Auth.action.login(testAuthCredentials))
+    function handleIncorrectLogin() {
+        store[StoreList.auth].login({login: 'eee', password: 'www'})
     }
 
-    function handleLogout () {
-        return dispatch(Auth.action.logout())
+    function handleLogout() {
+        store[StoreList.auth].logout()
     }
 
     return (
         <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="/"><h1>Книга контактов</h1></Navbar.Brand>
+                <Navbar.Brand href={`/${RoutesList.index}`}>
+                    <h1>Книга контактов</h1>
+                </Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link href="/groups">Группы</Nav.Link>
-                    <Nav.Link href="/favorit">Избранное</Nav.Link>
+                    <Nav.Link href={`/${RoutesList.groups}`}>Группы</Nav.Link>
+                    <Nav.Link href={`/${RoutesList.favourite}`}>Избранное</Nav.Link>
                 </Nav>
-                <div>
+                <div className="d-flex">
+                    <div>
+                        <span className="me-2">Total: {store[StoreList.contacts].count}</span>
+                        {
+                            isAuthenticated
+                                ? <span className="badge bg-success me-2">&nbsp;</span>
+                                : <span className="badge bg-danger me-2">&nbsp;</span>
+                        }
+                        {
+                            isLoading && 'Loading'
+                        }
+                    </div>
                     <Button variant="outline-primary" onClick={handleThunkCall}>Async Function</Button>
-                    <Button variant="success" onClick={handleCorrectLogin}>Correct login</Button>
-                    <Button variant="warning" onClick={handleIncorrectLogin}>Incorrect login</Button>
-                    <Button variant="danger" onClick={handleLogout}>Logout</Button>
+                    <Button
+                        variant="success"
+                        disabled={isAuthenticated || isLoading}
+                        onClick={handleCorrectLogin}
+                    >Correct login</Button>
+                    <Button
+                        variant="warning"
+                        disabled={isAuthenticated || isLoading}
+                        onClick={handleIncorrectLogin}
+                    >Incorrect login</Button>
+                    <Button
+                        variant="danger"
+                        disabled={!isAuthenticated || isLoading}
+                        onClick={handleLogout}
+                    >Logout</Button>
                 </div>
             </Container>
         </Navbar>
     )
-}
+})

@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@redux-devtools/extension": "^3.3.0",
+    "mobx": "^6.12.3",
+    "mobx-react-lite": "^4.0.7",
     "react-toastify": "9.1.2"
   }
 }

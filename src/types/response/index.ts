@@ -1,6 +1,6 @@
 export interface SuccessResponse<T> {
     success: true,
-    data: T,
+    data?: T,
 }
 
 export interface ErrorResponse {

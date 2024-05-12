@@ -5,18 +5,23 @@ import { useParams } from 'react-router-dom'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
+import store, { StoreList } from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-import { useGetContactQuery } from 'src/store/contact'
-import { useGetGroupContactsQuery } from 'src/store/group'
+// import { useGetContactQuery } from 'src/store/contact'
+// import { useGetGroupContactsQuery } from 'src/store/group'
 
-export const GroupPage = memo(() => {
+export const GroupPage = observer(() => {
     const {groupId} = useParams<{ groupId: string }>()
 
     // const groupContacts = useSelector(Selector[ReducersList.groupContacts].byId(groupId as GroupContactsDto['id']))!
-    const {data: groupContactsList} = useGetGroupContactsQuery()
-    const {data: contactsList} = useGetContactQuery()
+    // const {data: groupContactsList} = useGetGroupContactsQuery()
+    // const {data: contactsList} = useGetContactQuery()
 
-    if (!contactsList || !groupContactsList) {
+    const {data: contactsList, isLoading: contactsIsLoading} = store[StoreList.contacts]
+    const {data: groupContactsList, isLoading: groupContactsIsLoading} = store[StoreList.groups]
+
+    if (contactsIsLoading || groupContactsIsLoading) {
         return <h2>Loading...</h2>
     }
 
