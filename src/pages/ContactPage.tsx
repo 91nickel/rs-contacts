@@ -3,17 +3,19 @@ import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { ContactCard } from 'src/components/ContactCard'
 import { Empty } from 'src/components/Empty'
-import { useGetContactQuery } from 'src/store/contact'
+// import { useGetContactQuery } from 'src/store/contact'
+import store, { StoreList } from 'src/store'
+import { observer } from 'mobx-react-lite'
 
-export const ContactPage = () => {
+export const ContactPage = observer(() => {
 
     const {contactId} = useParams<{ contactId: string }>()
 
-    const {data: contacts} = useGetContactQuery()
+    const {data: contacts, isLoading} = store[StoreList.contacts]
 
     const contact = contacts && contacts.find(contact => contact.id === contactId)
 
-    if (!contact) {
+    if (isLoading) {
         return <h2>Loading...</h2>
     }
 
@@ -24,4 +26,4 @@ export const ContactPage = () => {
             </Col>
         </Row>
     )
-}
+})

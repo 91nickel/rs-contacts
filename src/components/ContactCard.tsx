@@ -1,36 +1,32 @@
-import React, { memo } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { Button, Card, ListGroup } from 'react-bootstrap'
-
-import { Selector, ReducersList, Action } from 'src/store'
-
 import { ContactDto } from 'src/types/dto/ContactDto'
-import Reducers from 'src/store/reducers.list'
-import { useAppDispatch } from 'src/store/hooks'
 import { RoutesList } from 'src/routes'
+import { observer } from 'mobx-react-lite'
+import store, { StoreList } from 'src/store'
 
 interface ContactCardProps {
     contact: ContactDto,
     withLink?: boolean,
 }
 
-export const ContactCard = memo<ContactCardProps>((
+export const ContactCard = observer((
     {
         contact: {photo, id, name, phone, birthday, address},
         withLink,
-    },
-    ) => {
-        const dispatch = useAppDispatch()
+    }: ContactCardProps) => {
 
-        const isInFavorites = useSelector(Selector[ReducersList.favouriteContacts].includes(id))
-        const isLoading = useSelector(Selector[ReducersList.favouriteContacts].isLoading())
+        const favouritesStore = store[StoreList.favourites]
+        const {data: favourites, isLoading} = favouritesStore
+
+        const isInFavourites = favourites.includes(id)
 
         function handleFavourites() {
-            if (isInFavorites) {
-                dispatch(Action[Reducers.favouriteContacts].delete(id))
+            if (isInFavourites) {
+                favouritesStore.remove(id)
             } else {
-                dispatch(Action[Reducers.favouriteContacts].addAsync(id))
+                favouritesStore.add(id)
             }
         }
 
@@ -49,7 +45,7 @@ export const ContactCard = memo<ContactCardProps>((
                         </ListGroup>
                     </Card.Body>
                     <Button variant="success" onClick={handleFavourites} disabled={isLoading}>
-                        {isInFavorites ? '-' : '+'}
+                        {isInFavourites ? '-' : '+'}
                     </Button>
                 </Card.Body>
             </Card>
