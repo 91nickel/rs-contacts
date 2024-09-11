@@ -1,5 +1,5 @@
 export {ContactListPage} from './ContactListPage'
-export {FavouriteListPage} from './FavouriteListPage'
+export {ContactPage} from './ContactPage'
 export {GroupListPage} from './GroupListPage'
 export {GroupPage} from './GroupPage'
-export {ContactPage} from './ContactPage'
+export {FavouriteListPage} from './FavouriteListPage'
