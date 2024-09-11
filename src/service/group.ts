@@ -1,4 +1,5 @@
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
+import { DATA_GROUP_CONTACT } from 'src/__data__'
 
 const ENTRYPOINT = 'https://fs.gcfiles.net/fileservice/file/download'
 
@@ -8,8 +9,9 @@ enum Endpoints {
 
 const service = {
     fetch: function (): Promise<GroupContactsDto[]> {
-        return fetch(`${ENTRYPOINT}${Endpoints.get}`)
-            .then(res => res.json())
+        return new Promise((res) => setTimeout(() => res(DATA_GROUP_CONTACT), 500))
+        // return fetch(`${ENTRYPOINT}${Endpoints.get}`)
+        //     .then(res => res.json())
     }
 }
 
