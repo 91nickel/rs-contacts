@@ -7,10 +7,10 @@ const PORT = 3000
 
 if (process.env.NODE_ENV === 'production') {
     console.log('Prod ...')
-    app.use('/', express.static(path.join(__dirname, 'public')))
-    const indexPath = path.join(__dirname, 'public', 'index.html')
+    app.use('/', express.static(path.join(__dirname, 'build')))
+    const indexPath = path.join(__dirname, 'build', 'index.html')
     app.get('*', (request, response) => {
-        return response.send('Hello')
+        return response.send(indexPath)
     })
 } else {
     console.log('Dev ...')
