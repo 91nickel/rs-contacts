@@ -9,6 +9,7 @@ RUN npm i && npm run build
 RUN mv /tmp/app/server.js /app/server.js
 RUN mv /tmp/app/build /app/build
 RUN mv /tmp/app/public /app/public
+RUN rm -rd /tmp/app
 
 EXPOSE 3000
 
