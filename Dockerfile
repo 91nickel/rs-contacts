@@ -9,9 +9,8 @@ RUN npm i && npm run build
 WORKDIR /tmp/app/server
 RUN npm i
 
-RUN mv /tmp/app/server /app \
-    && mv /tmp/app/build /app/build \
-    && mv /tmp/app/public /app/public \
+RUN mv /tmp/app/build /app \
+    && mv /tmp/app/server/* /app/ \
     && rm -rd /tmp/app
 
 EXPOSE 3000
