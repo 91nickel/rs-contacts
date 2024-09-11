@@ -7,12 +7,12 @@ RUN git clone https://github.com/91nickel/rs-contacts.git .
 RUN npm i && npm run build
 
 WORKDIR /tmp/app/server
-RUN npm i && npm run build
+RUN npm i
 
-RUN mv /tmp/app/server /app
-RUN mv /tmp/app/build /app/build
-RUN mv /tmp/app/public /app/public
-RUN rm -rd /tmp/app
+RUN mv /tmp/app/server /app \
+    && mv /tmp/app/build /app/build \
+    && mv /tmp/app/public /app/public \
+    && rm -rd /tmp/app
 
 EXPOSE 3000
 
