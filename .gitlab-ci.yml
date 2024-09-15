@@ -44,10 +44,11 @@ stages:
 
 building docker image:
   stage: deploy
+  variables:
+    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
   script:
-    - export IMAGE_NAME="${DOCKER_LOGIN}/rs-contacts"
-    - docker build --tag ${IMAGE_NAME} --no-cache .
-    - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+    - docker build -t ${IMAGE_NAME} --no-cache .
+    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY_URL}
     - docker push ${IMAGE_NAME}
 
 #deploy:
