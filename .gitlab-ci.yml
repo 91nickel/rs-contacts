@@ -1,45 +1,50 @@
 stages:
-#  - install
-#  - build
+  - install
+  - build
+  - build image
   - deploy
 
-#installing dependencies:
-#  stage: install
-#  image: node:18
-#  script:
-#    - pwd
-##    - cd /builds/Nikita_Kuznetsov/rs-contacts
-#    - npm ci
-#  cache:
-#    policy: push
-#    key: "${CI_COMMIT_REF_SLUG}|node_modules"
-#    paths:
-#      - "./node_modules"
-#
-#creating production build:
-#  stage: build
-#  image: node:18
-#  script:
-#    - npm run build
-#  cache:
-#    policy: pull
-#    key: "${CI_COMMIT_REF_SLUG}|node_modules"
-#    paths:
-#      - "./node_modules"
-#
-#running tests:
-#  stage: build
-#  image: node:18
-#  script:
-#    - npm run test
-#  cache:
-#    policy: pull
-#    key: "${CI_COMMIT_REF_SLUG}|node_modules"
-#    paths:
-#      - "./node_modules"
+installing dependencies:
+  stage: install
+  image: node:18
+  script:
+    - pwd
+#    - cd /builds/Nikita_Kuznetsov/rs-contacts
+    - npm ci
+  cache:
+    - policy: push
+      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+      paths:
+        - "./node_modules"
+
+running tests:
+  stage: build
+  image: node:18
+  script:
+    - npm run test
+  cache:
+    - policy: pull
+      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+      paths:
+        - "./node_modules"
+
+creating production build:
+  stage: build
+  image: node:18
+  script:
+    - npm run build
+  cache:
+    - policy: pull
+      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+      paths:
+        - "./node_modules"
+    - policy: push
+      key: "${CI_COMMIT_REF_SLUG}|build"
+      paths:
+        - "./build"
 
 building contacts image:
-  stage: deploy
+  stage: build image
   image: docker
   services:
     - docker:dind
@@ -52,17 +57,28 @@ building contacts image:
   when: manual
   only:
     - master
+  cache:
+    - policy: pull
+      key: "${CI_COMMIT_REF_SLUG}|build"
+      paths:
+        - "./build"
 
-#deploy:
-#  stage: deploy
-#  script:
-#    - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
-##    - docker build -t $CI_REGISTRY/nikita_kuznetsov/cicd/python-api:latest .
-##    - docker push $CI_REGISTRY/nikita_kuznetsov/cicd/python-api:latest
-#  only:
-#    - master
-#  when: manual
-#
+deploy:
+  stage: deploy
+  image: ringcentral/sshpass
+  before_script:
+    - docker info
+    - eval "$(ssh-agent -s)"
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - ssh nikita@test.foroffice.ru -p 22122 -o StrictHostKeyChecking=no "ls -la"
+  only:
+    - master
+  when: manual
+
 #install:
 #  stage: test
 #  script:
