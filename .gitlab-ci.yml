@@ -4,8 +4,8 @@
 
 stages:
   - install
-#  - build
-#  - test
+  - build
+  - test
 #  - deploy
 
 npm ci:
@@ -15,6 +15,33 @@ npm ci:
     - pwd
 #    - cd /builds/Nikita_Kuznetsov/rs-contacts
     - npm ci
+  cache:
+    policy: push
+    key: "${CI_COMMIT_REF_SLUG}|node_modules"
+    paths:
+      - "./node_modules"
+
+npm build:
+  stage: build
+  image: node:18
+  script:
+    - npm run build
+  cache:
+    policy: pull
+    key: "${CI_COMMIT_REF_SLUG}|node_modules"
+    paths:
+      - "./node_modules"
+
+npm test:
+  stage: test
+  image: node:18
+  script:
+    - export CI=true && npm run test
+  cache:
+    policy: pull
+    key: "${CI_COMMIT_REF_SLUG}|node_modules"
+    paths:
+      - "./node_modules"
 
 #deploy:
 #  stage: deploy
