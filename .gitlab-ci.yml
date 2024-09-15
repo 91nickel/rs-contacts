@@ -45,9 +45,9 @@ building docker image:
 #  variables:
 #    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
   script:
-    - docker build --tag ${CI_REGISTRY_LOGIN}/rs-contacts --no-cache .
-    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY_URL}
-    - docker push ${CI_REGISTRY_LOGIN}/rs-contacts
+    - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+    - docker build --tag $CI_REGISTRY_LOGIN/rs-contacts --no-cache .
+    - docker push $CI_REGISTRY_LOGIN/rs-contacts
   when: manual
   only:
     - master
