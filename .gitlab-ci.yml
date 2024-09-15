@@ -38,17 +38,17 @@ stages:
 #    paths:
 #      - "./node_modules"
 
-building docker image:
+building contacts image:
   stage: deploy
   image: docker
   services:
     - docker:dind
-#  variables:
-#    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
+  variables:
+    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
   script:
     - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD}
-    - docker build -f ./Dockerfile --tag 91nickel/rs-contacts --no-cache .
-    - docker push 91nickel/rs-contacts
+    - docker build --tag ${IMAGE_NAME} --no-cache .
+    - docker push ${IMAGE_NAME}
   when: manual
   only:
     - master
