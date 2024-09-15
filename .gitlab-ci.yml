@@ -68,7 +68,6 @@ deploy:
   stage: deploy
   image: ringcentral/sshpass
   before_script:
-    - eval "$(ssh-agent -s)"
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo $SSH_KEY > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
   script:
