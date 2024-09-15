@@ -68,8 +68,10 @@ deploy:
   stage: deploy
   image: ringcentral/sshpass
   before_script:
-    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+#    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - chmod 600 ${SSH_KEY}
+    - cat ${SSH_KEY}
+    - ls -l ${SSH_KEY}
   script:
     - ssh -p 22122 -i ${SSH_KEY} -o StrictHostKeyChecking=no nikita@test.foroffice.ru "ls -la"
   only:
