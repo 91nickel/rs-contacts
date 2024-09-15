@@ -1,6 +1,6 @@
 stages:
-  - build app
-  - build image
+#  - build app
+#  - build image
   - deploy
 
 #installing dependencies:
@@ -27,48 +27,47 @@ stages:
 #      paths:
 #        - "./node_modules"
 
-creating production build:
-  stage: build app
-  image: node:18
-  script:
-    - npm ci
-    - npm run test
-    - npm run build
-  cache:
-    - policy: push
-      key: "${CI_COMMIT_REF_SLUG}|node_modules"
-      paths:
-        - "./node_modules"
-    - policy: push
-      key: "${CI_COMMIT_REF_SLUG}|build"
-      paths:
-        - "./build"
-
-building contacts image:
-  stage: build image
-  image: docker
-  services:
-    - docker:dind
-  variables:
-    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
-  script:
-    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD}
-    - docker build --tag ${IMAGE_NAME} --no-cache .
-    - docker push ${IMAGE_NAME}
-  when: manual
-  only:
-    - master
-  cache:
-    - policy: pull
-      key: "${CI_COMMIT_REF_SLUG}|build"
-      paths:
-        - "./build"
+#creating production build:
+#  stage: build app
+#  image: node:18
+#  script:
+#    - npm ci
+#    - npm run test
+#    - npm run build
+#  cache:
+#    - policy: push
+#      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+#      paths:
+#        - "./node_modules"
+#    - policy: push
+#      key: "${CI_COMMIT_REF_SLUG}|build"
+#      paths:
+#        - "./build"
+#
+#building contacts image:
+#  stage: build image
+#  image: docker
+#  services:
+#    - docker:dind
+#  variables:
+#    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
+#  script:
+#    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD}
+#    - docker build --tag ${IMAGE_NAME} --no-cache .
+#    - docker push ${IMAGE_NAME}
+#  when: manual
+#  only:
+#    - master
+#  cache:
+#    - policy: pull
+#      key: "${CI_COMMIT_REF_SLUG}|build"
+#      paths:
+#        - "./build"
 
 deploy:
   stage: deploy
   image: ringcentral/sshpass
   before_script:
-    - docker info
     - eval "$(ssh-agent -s)"
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo $SSH_KEY > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
