@@ -18,5 +18,6 @@ RUN crontab /crontab.cfg
 RUN apt-get update && apt-get install -y systemd
 
 COPY --from=contacts /app /var/www/html/app
+COPY contacts.forofice.ru.conf /etc/nginx/conf.d/contacts.forofice.ru.conf
 
 CMD service cron start && nginx -g "daemon off;"
