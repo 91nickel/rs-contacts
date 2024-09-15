@@ -68,9 +68,9 @@ deploy:
   stage: deploy
   image: ringcentral/sshpass
   script:
-    - ls -la /root
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo ${SSH_KEY} > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - ls -la /root/.ssh/
     - cat ~/.ssh/id_rsa
     - ssh -p 22122 -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nikita@test.foroffice.ru "ls -la"
   only:
