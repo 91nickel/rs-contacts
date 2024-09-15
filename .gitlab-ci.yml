@@ -69,10 +69,9 @@ deploy:
   image: ringcentral/sshpass
   before_script:
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-    - cp ${SSH_KEY} > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 600 ${SSH_KEY}
   script:
-    - ssh -p 22122 -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nikita@test.foroffice.ru "ls -la"
+    - ssh -p 22122 -i ${SSH_KEY} -o StrictHostKeyChecking=no nikita@test.foroffice.ru "ls -la"
   only:
     - master
   when: manual
