@@ -70,7 +70,7 @@ deploy:
   before_script:
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo $SSH_KEY > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - echo /.ssh/id_rsa
+    - cat ~/.ssh/id_rsa
   script:
     - ssh nikita@test.foroffice.ru -p 22122 -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "ls -la"
   only:
