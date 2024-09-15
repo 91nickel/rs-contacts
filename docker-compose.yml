@@ -1,16 +1,6 @@
 version: '3.8'
 
 services:
-  contacts:
-#    build: .
-    image: 91nickel/rs-contacts
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      TZ: Europe/Moscow
-    ports:
-      - "3000:3000"
-
   nginx:
     build: nginx
     environment:
@@ -21,8 +11,6 @@ services:
       - "20443:443"
     volumes:
       - ssl:/etc/letsencrypt
-      - ./nginx/sites-available/:/etc/nginx/sites-available/
-      - ./nginx/sites-enabled/:/etc/nginx/sites-enabled/
 
 volumes:
   ssl:

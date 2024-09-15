@@ -11,10 +11,10 @@ building and testing app:
     - npm run test
     - npm run build
   cache:
-    - policy: push
-      key: "${CI_COMMIT_REF_SLUG}|node_modules"
-      paths:
-        - "./node_modules"
+#    - policy: push
+#      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+#      paths:
+#        - "./node_modules"
     - policy: push
       key: "${CI_COMMIT_REF_SLUG}|build"
       paths:
@@ -34,10 +34,10 @@ building image:
   only:
     - master
   cache:
-    - policy: pull
-      key: "${CI_COMMIT_REF_SLUG}|node_modules"
-      paths:
-        - "./node_modules"
+#    - policy: pull
+#      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+#      paths:
+#        - "./node_modules"
     - policy: pull
       key: "${CI_COMMIT_REF_SLUG}|build"
       paths:
@@ -53,21 +53,3 @@ deploy:
   only:
     - master
   when: manual
-
-#install:
-#  stage: test
-#  script:
-#    - npm install
-#
-#test:
-#  stage: test
-#  script:
-#    - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
-#    - docker pull hello-world
-#    - docker run --rm hello-world
-##    - docker pull $CI_REGISTRY/nikita_kuznetsov/cicd/python-api:latest
-##    - docker run -dt --name api --expose 5290 $CI_REGISTRY/nikita_kuznetsov/cicd/python-api
-##    - sleep 10s
-##    - docker ps
-##    - docker exec api curl localhost:5290/get_info
-##    - docker stop api

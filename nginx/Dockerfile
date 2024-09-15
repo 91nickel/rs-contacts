@@ -1,3 +1,5 @@
+FROM 91nickel/rs-contacts AS contacts
+
 FROM nginx:1.23.1
 
 # nginx
@@ -14,5 +16,7 @@ RUN echo "Europe/Moscow" > /etc/timezone && dpkg-reconfigure -f noninteractive t
 COPY crontab.cfg /crontab.cfg
 RUN crontab /crontab.cfg
 RUN apt-get update && apt-get install -y systemd
+
+COPY --from=contacts /app /var/www/html/app
 
 CMD service cron start && nginx -g "daemon off;"
