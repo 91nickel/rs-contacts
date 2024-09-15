@@ -46,7 +46,7 @@ building docker image:
 #  variables:
 #    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
   script:
-    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY_URL}
+    - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD}
     - docker build --tag 91nickel/rs-contacts --no-cache .
     - docker push 91nickel/rs-contacts
   when: manual
