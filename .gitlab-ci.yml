@@ -69,10 +69,8 @@ deploy:
   before_script:
     - docker info
     - eval "$(ssh-agent -s)"
-    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - echo $SSH_KEY > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
   script:
     - ssh nikita@test.foroffice.ru -p 22122 -o StrictHostKeyChecking=no "ls -la"
   only:
