@@ -1,40 +1,41 @@
 stages:
-  - install
-  - build
+  - build app
   - build image
   - deploy
 
-installing dependencies:
-  stage: install
-  image: node:18
-  script:
-    - pwd
-#    - cd /builds/Nikita_Kuznetsov/rs-contacts
-    - npm ci
-  cache:
-    - policy: push
-      key: "${CI_COMMIT_REF_SLUG}|node_modules"
-      paths:
-        - "./node_modules"
-
-running tests:
-  stage: build
-  image: node:18
-  script:
-    - npm run test
-  cache:
-    - policy: pull
-      key: "${CI_COMMIT_REF_SLUG}|node_modules"
-      paths:
-        - "./node_modules"
+#installing dependencies:
+#  stage: install
+#  image: node:18
+#  script:
+#    - pwd
+##    - cd /builds/Nikita_Kuznetsov/rs-contacts
+#    - npm ci
+#  cache:
+#    - policy: push
+#      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+#      paths:
+#        - "./node_modules"
+#
+#running tests:
+#  stage: build
+#  image: node:18
+#  script:
+#    - npm run test
+#  cache:
+#    - policy: pull
+#      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+#      paths:
+#        - "./node_modules"
 
 creating production build:
-  stage: build
+  stage: build app
   image: node:18
   script:
+    - npm ci
+    - npm run test
     - npm run build
   cache:
-    - policy: pull
+    - policy: push
       key: "${CI_COMMIT_REF_SLUG}|node_modules"
       paths:
         - "./node_modules"
