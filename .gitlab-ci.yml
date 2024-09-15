@@ -1,11 +1,11 @@
-#image: docker:20.10.5
-#services:
-#  - docker:20.10.5-dind
+image: docker:20.10.5
+services:
+  - docker:20.10.5-dind
 
 stages:
   - install
   - build
-#  - deploy
+  - deploy
 
 installing dependencies:
   stage: install
@@ -41,6 +41,15 @@ running tests:
     key: "${CI_COMMIT_REF_SLUG}|node_modules"
     paths:
       - "./node_modules"
+
+building docker image:
+  stage: deploy
+  variables:
+    IMAGE_NAME: "${DOCKER_LOGIN}/rs-contacts"
+  script:
+    - docker build -t ${IMAGE_NAME} --no-cache .
+    - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+    - docker push ${IMAGE_NAME}
 
 #deploy:
 #  stage: deploy
