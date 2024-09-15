@@ -28,7 +28,7 @@ export const MainMenu = observer(() => {
         <Navbar bg="light" expand="lg">
             <Container>
                 <Navbar.Brand href={`/${RoutesList.index}`}>
-                    <h1>Книга контактов</h1>
+                    <h1>Книга контактов Deployed</h1>
                 </Navbar.Brand>
                 <Nav className="me-auto">
                     <Nav.Link href={`/${RoutesList.groups}`}>Группы</Nav.Link>
