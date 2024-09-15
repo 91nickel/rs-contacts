@@ -57,6 +57,7 @@
     "express": "^4.20.0",
     "mobx": "^6.12.3",
     "mobx-react-lite": "^4.0.7",
-    "react-toastify": "9.1.2"
+    "react-toastify": "9.1.2",
+    "ts-jest": "^29.2.5"
   }
 }
