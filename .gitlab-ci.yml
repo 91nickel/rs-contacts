@@ -46,7 +46,7 @@ building docker image:
   stage: deploy
   script:
     - export IMAGE_NAME="${DOCKER_LOGIN}/rs-contacts"
-    - docker build -t ${IMAGE_NAME} --no-cache .
+    - docker build --tag ${IMAGE_NAME} --no-cache .
     - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
     - docker push ${IMAGE_NAME}
 
