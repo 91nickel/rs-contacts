@@ -5,7 +5,6 @@
 stages:
   - install
   - build
-  - test
 #  - deploy
 
 installing dependencies:
@@ -21,7 +20,7 @@ installing dependencies:
     paths:
       - "./node_modules"
 
-create production build:
+creating production build:
   stage: build
   image: node:18
   script:
@@ -33,7 +32,7 @@ create production build:
       - "./node_modules"
 
 running tests:
-  stage: test
+  stage: build
   image: node:18
   script:
     - npm run test
