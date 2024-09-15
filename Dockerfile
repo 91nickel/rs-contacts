@@ -17,6 +17,7 @@ RUN mkdir /app
 
 COPY ./server/* /app
 COPY ./build /app
+COPY ./node_modules /app/node_modules
 
 WORKDIR /app
 
