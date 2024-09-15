@@ -1,10 +1,10 @@
 stages:
-  - build app
-  - build image
+  - app
+  - image
   - deploy
 
 building and testing app:
-  stage: build app
+  stage: app
   image: node:18
   script:
     - npm ci
@@ -21,7 +21,7 @@ building and testing app:
         - "./build"
 
 building image:
-  stage: build image
+  stage: image
   image: docker
   services:
     - docker:dind
