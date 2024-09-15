@@ -67,11 +67,10 @@ stages:
 deploy:
   stage: deploy
   image: ringcentral/sshpass
-  before_script:
+  script:
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo ${SSH_KEY} > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cat ~/.ssh/id_rsa
-  script:
     - ssh -p 22122 -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no nikita@test.foroffice.ru "ls -la"
   only:
     - master
