@@ -42,7 +42,7 @@ building image:
 
 deploy:
   stage: deploy
-  image: ringcentral/sshpass
+  image: docker
   before_script:
     - chmod 600 ${SSH_KEY}
   script:
