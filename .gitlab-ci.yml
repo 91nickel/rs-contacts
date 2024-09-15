@@ -40,8 +40,8 @@ stages:
 
 building docker image:
   stage: deploy
-  services:
-    - docker:dind
+#  services:
+#    - docker:dind
 #  variables:
 #    IMAGE_NAME: "${CI_REGISTRY_LOGIN}/rs-contacts"
   script:
