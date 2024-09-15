@@ -4,6 +4,7 @@ services:
 stages:
   - deploy
   - test
+
 deploy:
   stage: deploy
   script:
@@ -12,8 +13,11 @@ deploy:
 #    - docker push $CI_REGISTRY/nikita_kuznetsov/cicd/python-api:latest
   only:
     - master
+  when: manual
+
 test:
   stage: test
+  when: manual
   script:
     - docker login -u $CI_REGISTRY_LOGIN -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
     - docker pull hello-world
