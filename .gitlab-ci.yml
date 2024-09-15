@@ -12,10 +12,9 @@ npm ci:
   stage: install
   image: node:18
   script:
-    - ls -la
     - pwd
 #    - cd /builds/Nikita_Kuznetsov/rs-contacts
-#    - npm ci
+    - npm ci
 
 #deploy:
 #  stage: deploy
