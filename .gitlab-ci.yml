@@ -36,6 +36,10 @@ building image:
     - master
   cache:
     - policy: pull
+      key: "${CI_COMMIT_REF_SLUG}|node_modules"
+      paths:
+        - "./node_modules"
+    - policy: pull
       key: "${CI_COMMIT_REF_SLUG}|build"
       paths:
         - "./build"
