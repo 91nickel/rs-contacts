@@ -36,7 +36,7 @@ npm test:
   stage: test
   image: node:18
   script:
-    - export CI=true && npm run test
+    - npm run test
   cache:
     policy: pull
     key: "${CI_COMMIT_REF_SLUG}|node_modules"
