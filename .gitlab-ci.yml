@@ -31,7 +31,6 @@ building image:
     - docker login -u ${CI_REGISTRY_LOGIN} -p ${CI_REGISTRY_PASSWORD}
     - docker build --tag ${IMAGE_NAME} --no-cache .
     - docker push ${IMAGE_NAME}
-  when: manual
   only:
     - master
   cache:
